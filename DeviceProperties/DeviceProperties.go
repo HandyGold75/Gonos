@@ -14,14 +14,14 @@ type (
 		Source string
 	}
 
-	GetZoneAttributesResponse struct {
+	getZoneAttributesResponse struct {
 		XMLName               xml.Name `xml:"GetZoneAttributesResponse"`
 		CurrentZoneName       string
 		CurrentIcon           string
 		CurrentConfiguration  string
 		CurrentTargetRoomName string
 	}
-	GetZoneInfoResponse struct {
+	getZoneInfoResponse struct {
 		XMLName                xml.Name `xml:"GetZoneInfoResponse"`
 		SerialNumber           string
 		SoftwareVersion        string
@@ -31,7 +31,7 @@ type (
 		MACAddress             string
 		CopyrightInfo          string
 		ExtraInfo              string
-		// SPDIF input, 0 not connected / 2 stereo / 7 Dolby 2.0 / 18 dolby 5.1 / 21 not listening / 22 silence
+		// SPDIF input, `0` not connected, `2` stereo, `7` Dolby 2.0, `18` dolby 5.1, `21` not listening, `22` silence
 		HTAudioIn int
 		Flags     int
 	}
@@ -41,158 +41,158 @@ func New(send func(action, body, targetTag string) (string, error)) DeviceProper
 	return DeviceProperties{Send: send, Source: ""}
 }
 
-func (zp *DeviceProperties) AddBondedZones(channelMapSet string) error {
-	_, err := zp.Send("AddBondedZones", "<ChannelMapSet>"+channelMapSet+"</ChannelMapSet>", "")
+func (s *DeviceProperties) AddBondedZones(channelMapSet string) error {
+	_, err := s.Send("AddBondedZones", "<ChannelMapSet>"+channelMapSet+"</ChannelMapSet>", "")
 	return err
 }
 
-func (zp *DeviceProperties) AddHTSatellite(hTSatChanMapSet string) error {
-	_, err := zp.Send("AddHTSatellite", "<HTSatChanMapSet>"+hTSatChanMapSet+"</HTSatChanMapSet>", "")
+func (s *DeviceProperties) AddHTSatellite(hTSatChanMapSet string) error {
+	_, err := s.Send("AddHTSatellite", "<HTSatChanMapSet>"+hTSatChanMapSet+"</HTSatChanMapSet>", "")
 	return err
 }
 
-func (zp *DeviceProperties) CreateStereoPair(channelMapSet string) error {
-	_, err := zp.Send("CreateStereoPair", "<ChannelMapSet>"+channelMapSet+"</ChannelMapSet>", "")
+func (s *DeviceProperties) CreateStereoPair(channelMapSet string) error {
+	_, err := s.Send("CreateStereoPair", "<ChannelMapSet>"+channelMapSet+"</ChannelMapSet>", "")
 	return err
 }
 
-func (zp *DeviceProperties) EnterConfigMode(mode string, options string) (string, error) {
-	res, err := zp.Send("EnterConfigMode", "<Mode>"+mode+"</Mode><Options>"+options+"</Options>", "State")
+func (s *DeviceProperties) EnterConfigMode(mode string, options string) (State string, err error) {
+	res, err := s.Send("EnterConfigMode", "<Mode>"+mode+"</Mode><Options>"+options+"</Options>", "State")
 	return res, err
 }
 
-func (zp *DeviceProperties) ExitConfigMode(options string) error {
-	_, err := zp.Send("ExitConfigMode", "<Options>"+options+"</Options>", "")
+func (s *DeviceProperties) ExitConfigMode(options string) error {
+	_, err := s.Send("ExitConfigMode", "<Options>"+options+"</Options>", "")
 	return err
 }
 
-func (zp *DeviceProperties) GetAutoplayLinkedZones() (bool, error) {
-	res, err := zp.Send("GetAutoplayLinkedZones", "<Source>"+zp.Source+"</Source>", "IncludeLinkedZones")
+func (s *DeviceProperties) GetAutoplayLinkedZones() (IncludeLinkedZones bool, err error) {
+	res, err := s.Send("GetAutoplayLinkedZones", "<Source>"+s.Source+"</Source>", "IncludeLinkedZones")
 	return res == "1", err
 }
 
-func (zp *DeviceProperties) GetAutoplayRoomUUID() (string, error) {
-	res, err := zp.Send("GetAutoplayRoomUUID", "<Source>"+zp.Source+"</Source>", "RoomUUID")
+func (s *DeviceProperties) GetAutoplayRoomUUID() (RoomUUID string, err error) {
+	res, err := s.Send("GetAutoplayRoomUUID", "<Source>"+s.Source+"</Source>", "RoomUUID")
 	return res, err
 }
 
-func (zp *DeviceProperties) GetAutoplayVolume() (int, error) {
-	res, err := zp.Send("GetAutoplayVolume", "<Source>"+zp.Source+"</Source>", "CurrentVolume")
+func (s *DeviceProperties) GetAutoplayVolume() (CurrentVolume int, err error) {
+	res, err := s.Send("GetAutoplayVolume", "<Source>"+s.Source+"</Source>", "CurrentVolume")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *DeviceProperties) GetButtonLockState() (bool, error) {
-	res, err := zp.Send("GetButtonLockState", "", "CurrentButtonLockState")
+func (s *DeviceProperties) GetButtonLockState() (CurrentButtonLockState bool, err error) {
+	res, err := s.Send("GetButtonLockState", "", "CurrentButtonLockState")
 	return res == "On", err
 }
 
-func (zp *DeviceProperties) GetButtonState() (string, error) {
-	res, err := zp.Send("GetButtonState", "", "State")
+func (s *DeviceProperties) GetButtonState() (State string, err error) {
+	res, err := s.Send("GetButtonState", "", "State")
 	return res, err
 }
 
-func (zp *DeviceProperties) GetHouseholdID() (string, error) {
-	res, err := zp.Send("GetHouseholdID", "", "CurrentHouseholdID")
+func (s *DeviceProperties) GetHouseholdID() (CurrentHouseholdID string, err error) {
+	res, err := s.Send("GetHouseholdID", "", "CurrentHouseholdID")
 	return res, err
 }
 
-func (zp *DeviceProperties) GetHTForwardState() (bool, error) {
-	res, err := zp.Send("GetHTForwardState", "", "IsHTForwardEnabled")
+func (s *DeviceProperties) GetHTForwardState() (IsHTForwardEnabled bool, err error) {
+	res, err := s.Send("GetHTForwardState", "", "IsHTForwardEnabled")
 	return res == "1", err
 }
 
-func (zp *DeviceProperties) GetLEDState() (bool, error) {
-	res, err := zp.Send("GetLEDState", "", "CurrentLEDState")
+func (s *DeviceProperties) GetLEDState() (CurrentLEDState bool, err error) {
+	res, err := s.Send("GetLEDState", "", "CurrentLEDState")
 	return res == "On", err
 }
 
-func (zp *DeviceProperties) GetUseAutoplayVolume() (bool, error) {
-	res, err := zp.Send("GetUseAutoplayVolume", "<Source>"+zp.Source+"</Source>", "UseVolume")
+func (s *DeviceProperties) GetUseAutoplayVolume() (UseVolume bool, err error) {
+	res, err := s.Send("GetUseAutoplayVolume", "<Source>"+s.Source+"</Source>", "UseVolume")
 	return res == "1", err
 }
 
-func (zp *DeviceProperties) GetZoneAttributes() (GetZoneAttributesResponse, error) {
-	res, err := zp.Send("GetZoneAttributes", "", "s:Body")
+func (s *DeviceProperties) GetZoneAttributes() (getZoneAttributesResponse, error) {
+	res, err := s.Send("GetZoneAttributes", "", "s:Body")
 	if err != nil {
-		return GetZoneAttributesResponse{}, err
+		return getZoneAttributesResponse{}, err
 	}
-	data := GetZoneAttributesResponse{}
+	data := getZoneAttributesResponse{}
 	err = xml.Unmarshal([]byte(res), &data)
 	return data, err
 }
 
-func (zp *DeviceProperties) GetZoneInfo() (GetZoneInfoResponse, error) {
-	res, err := zp.Send("GetZoneInfo", "", "s:Body")
+func (s *DeviceProperties) GetZoneInfo() (getZoneInfoResponse, error) {
+	res, err := s.Send("GetZoneInfo", "", "s:Body")
 	if err != nil {
-		return GetZoneInfoResponse{}, err
+		return getZoneInfoResponse{}, err
 	}
-	data := GetZoneInfoResponse{}
+	data := getZoneInfoResponse{}
 	err = xml.Unmarshal([]byte(res), &data)
 	return data, err
 }
 
-func (zp *DeviceProperties) RemoveBondedZones(channelMapSet string, keepGrouped bool) error {
-	_, err := zp.Send("RemoveBondedZones", "<ChannelMapSet>"+channelMapSet+"</ChannelMapSet><KeepGrouped>"+lib.BoolTo10(keepGrouped)+"</KeepGrouped>", "")
+func (s *DeviceProperties) RemoveBondedZones(channelMapSet string, keepGrouped bool) error {
+	_, err := s.Send("RemoveBondedZones", "<ChannelMapSet>"+channelMapSet+"</ChannelMapSet><KeepGrouped>"+lib.BoolTo10(keepGrouped)+"</KeepGrouped>", "")
 	return err
 }
 
-func (zp *DeviceProperties) RemoveHTSatellite(satRoomUUID string) error {
-	_, err := zp.Send("RemoveHTSatellite", "<SatRoomUUID>"+satRoomUUID+"</SatRoomUUID>", "")
+func (s *DeviceProperties) RemoveHTSatellite(satRoomUUID string) error {
+	_, err := s.Send("RemoveHTSatellite", "<SatRoomUUID>"+satRoomUUID+"</SatRoomUUID>", "")
 	return err
 }
 
-func (zp *DeviceProperties) RoomDetectionStartChirping(channel int, milliseconds int, chirpIfPlayingSwappableAudio bool) (int, error) {
-	res, err := zp.Send("RoomDetectionStartChirping", "<Channel>"+strconv.Itoa(channel)+"</Channel><DurationMilliseconds>"+strconv.Itoa(milliseconds)+"</DurationMilliseconds><ChirpIfPlayingSwappableAudio>"+lib.BoolTo10(chirpIfPlayingSwappableAudio)+"</ChirpIfPlayingSwappableAudio>", "PlayId")
+func (s *DeviceProperties) RoomDetectionStartChirping(channel int, milliseconds int, chirpIfPlayingSwappableAudio bool) (PlayId int, err error) {
+	res, err := s.Send("RoomDetectionStartChirping", "<Channel>"+strconv.Itoa(channel)+"</Channel><DurationMilliseconds>"+strconv.Itoa(milliseconds)+"</DurationMilliseconds><ChirpIfPlayingSwappableAudio>"+lib.BoolTo10(chirpIfPlayingSwappableAudio)+"</ChirpIfPlayingSwappableAudio>", "PlayId")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *DeviceProperties) RoomDetectionStopChirping(playId int) error {
-	_, err := zp.Send("RoomDetectionStopChirping", "<PlayId>"+strconv.Itoa(playId)+"</PlayId>", "")
+func (s *DeviceProperties) RoomDetectionStopChirping(playId int) error {
+	_, err := s.Send("RoomDetectionStopChirping", "<PlayId>"+strconv.Itoa(playId)+"</PlayId>", "")
 	return err
 }
 
-func (zp *DeviceProperties) SeparateStereoPair(channelMapSet string) error {
-	_, err := zp.Send("SeparateStereoPair", "<ChannelMapSet>"+channelMapSet+"</ChannelMapSet>", "")
+func (s *DeviceProperties) SeparateStereoPair(channelMapSet string) error {
+	_, err := s.Send("SeparateStereoPair", "<ChannelMapSet>"+channelMapSet+"</ChannelMapSet>", "")
 	return err
 }
 
-func (zp *DeviceProperties) SetAutoplayLinkedZones(includeLinkedZones bool) error {
-	_, err := zp.Send("SetAutoplayLinkedZones", "<IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones><Source>"+zp.Source+"</Source>", "")
+func (s *DeviceProperties) SetAutoplayLinkedZones(includeLinkedZones bool) error {
+	_, err := s.Send("SetAutoplayLinkedZones", "<IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones><Source>"+s.Source+"</Source>", "")
 	return err
 }
 
-func (zp *DeviceProperties) SetAutoplayRoomUUID(roomUUID string) error {
-	_, err := zp.Send("SetAutoplayRoomUUID", "<RoomUUID>"+roomUUID+"</RoomUUID><Source>"+zp.Source+"</Source>", "")
+func (s *DeviceProperties) SetAutoplayRoomUUID(roomUUID string) error {
+	_, err := s.Send("SetAutoplayRoomUUID", "<RoomUUID>"+roomUUID+"</RoomUUID><Source>"+s.Source+"</Source>", "")
 	return err
 }
 
-func (zp *DeviceProperties) SetAutoplayVolume(volume int) error {
-	_, err := zp.Send("SetAutoplayVolume", "<Volume>"+strconv.Itoa(max(0, min(100, volume)))+"</Volume><Source>"+zp.Source+"</Source>", "")
+func (s *DeviceProperties) SetAutoplayVolume(volume int) error {
+	_, err := s.Send("SetAutoplayVolume", "<Volume>"+strconv.Itoa(max(0, min(100, volume)))+"</Volume><Source>"+s.Source+"</Source>", "")
 	return err
 }
 
-func (zp *DeviceProperties) SetButtonLockState(state bool) error {
-	_, err := zp.Send("SetButtonLockState", "<DesiredButtonLockState>"+lib.BoolToOnOff(state)+"</DesiredButtonLockState>", "")
+func (s *DeviceProperties) SetButtonLockState(state bool) error {
+	_, err := s.Send("SetButtonLockState", "<DesiredButtonLockState>"+lib.BoolToOnOff(state)+"</DesiredButtonLockState>", "")
 	return err
 }
 
-func (zp *DeviceProperties) SetLEDState(state bool) error {
-	_, err := zp.Send("SetLEDState", "<DesiredLEDState>"+lib.BoolToOnOff(state)+"</DesiredLEDState>", "")
+func (s *DeviceProperties) SetLEDState(state bool) error {
+	_, err := s.Send("SetLEDState", "<DesiredLEDState>"+lib.BoolToOnOff(state)+"</DesiredLEDState>", "")
 	return err
 }
 
-func (zp *DeviceProperties) SetUseAutoplayVolume(state bool) error {
-	_, err := zp.Send("SetUseAutoplayVolume", "<UseVolume>"+lib.BoolTo10(state)+"</UseVolume><Source>"+zp.Source+"</Source>", "")
+func (s *DeviceProperties) SetUseAutoplayVolume(state bool) error {
+	_, err := s.Send("SetUseAutoplayVolume", "<UseVolume>"+lib.BoolTo10(state)+"</UseVolume><Source>"+s.Source+"</Source>", "")
 	return err
 }
 
-func (zp *DeviceProperties) SetZoneAttributes(zoneName string, icon string, configuration string, targetRoomName string) error {
-	_, err := zp.Send("SetZoneAttributes", "<DesiredZoneName>"+zoneName+"</DesiredZoneName><DesiredIcon>"+icon+"</DesiredIcon><DesiredConfiguration>"+configuration+"</DesiredConfiguration><DesiredTargetRoomName>"+targetRoomName+"</DesiredTargetRoomName>", "")
+func (s *DeviceProperties) SetZoneAttributes(zoneName string, icon string, configuration string, targetRoomName string) error {
+	_, err := s.Send("SetZoneAttributes", "<DesiredZoneName>"+zoneName+"</DesiredZoneName><DesiredIcon>"+icon+"</DesiredIcon><DesiredConfiguration>"+configuration+"</DesiredConfiguration><DesiredTargetRoomName>"+targetRoomName+"</DesiredTargetRoomName>", "")
 	return err
 }

@@ -7,7 +7,7 @@ import (
 )
 
 type (
-	trackInfo struct {
+	TrackInfo struct {
 		QuePosition int
 		Duration    string
 		URI         string
@@ -21,12 +21,12 @@ type (
 )
 
 // Get simplified info about currently playing track.
-func (h *Helper) GetTrackInfo() (*trackInfo, error) {
+func (h *Helper) GetTrackInfo() (TrackInfo, error) {
 	info, err := h.aVTransport.GetPositionInfo()
 	if err != nil {
-		return &trackInfo{}, err
+		return TrackInfo{}, err
 	}
-	return &trackInfo{
+	return TrackInfo{
 		QuePosition: info.Track,
 		Duration:    info.TrackDuration,
 		URI:         info.TrackURI,
