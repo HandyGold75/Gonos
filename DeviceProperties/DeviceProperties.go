@@ -104,6 +104,7 @@ func (s *DeviceProperties) GetHTForwardState() (IsHTForwardEnabled bool, err err
 	return res == "1", err
 }
 
+// Prefer method `h.GetLEDState`.
 func (s *DeviceProperties) GetLEDState() (CurrentLEDState bool, err error) {
 	res, err := s.Send("GetLEDState", "", "CurrentLEDState")
 	return res == "On", err
@@ -114,6 +115,7 @@ func (s *DeviceProperties) GetUseAutoplayVolume() (UseVolume bool, err error) {
 	return res == "1", err
 }
 
+// Prefer methods `h.GetZoneName`, `h.GetIcon`, `h.GetConfiguration`, `h.GetTargetRoomName`.
 func (s *DeviceProperties) GetZoneAttributes() (getZoneAttributesResponse, error) {
 	res, err := s.Send("GetZoneAttributes", "", "s:Body")
 	if err != nil {
@@ -124,6 +126,7 @@ func (s *DeviceProperties) GetZoneAttributes() (getZoneAttributesResponse, error
 	return data, err
 }
 
+// Prefer method `h.GetZoneInfo`.
 func (s *DeviceProperties) GetZoneInfo() (getZoneInfoResponse, error) {
 	res, err := s.Send("GetZoneInfo", "", "s:Body")
 	if err != nil {
@@ -182,6 +185,7 @@ func (s *DeviceProperties) SetButtonLockState(state bool) error {
 	return err
 }
 
+// Prefer method `h.SetLEDState`.
 func (s *DeviceProperties) SetLEDState(state bool) error {
 	_, err := s.Send("SetLEDState", "<DesiredLEDState>"+lib.BoolToOnOff(state)+"</DesiredLEDState>", "")
 	return err
@@ -192,6 +196,7 @@ func (s *DeviceProperties) SetUseAutoplayVolume(state bool) error {
 	return err
 }
 
+// Prefer methods `h.SetZoneName`, `h.SetIcon`, `h.SetConfiguration`, `h.SetTargetRoomName`.
 func (s *DeviceProperties) SetZoneAttributes(zoneName string, icon string, configuration string, targetRoomName string) error {
 	_, err := s.Send("SetZoneAttributes", "<DesiredZoneName>"+zoneName+"</DesiredZoneName><DesiredIcon>"+icon+"</DesiredIcon><DesiredConfiguration>"+configuration+"</DesiredConfiguration><DesiredTargetRoomName>"+targetRoomName+"</DesiredTargetRoomName>", "")
 	return err

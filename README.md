@@ -27,7 +27,7 @@ This can be done using either the Sonos services (base implementation) or the he
 The available Sonos services are:
 
 - `zp.AlarmClock`
-- `zp.AudioIn` (Not yet implemented)
+- `zp.AudioIn`
 - `zp.AVTransport`
 - `zp.ConnectionManager` (Not yet implemented)
 - `zp.ContentDirectory`
@@ -49,7 +49,7 @@ Some examples for controlling a Sonos device using the Sonos services:
 
 ```go
 err := zp.AlarmClock.GetTimeServer() // Get the current time server.
-err := zp.AudioIn
+err := zp.AudioIn.SetLineInLevel(10, 10) // Set left and right line in level to 10.
 err := zp.AVTransport.Play() // Play current track.
 err := zp.ConnectionManager
 queInfo, err := zp.ContentDirectory.Browse(Gonos.lib.ContentTypes.QueueMain, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "") // Get info of the current main que.

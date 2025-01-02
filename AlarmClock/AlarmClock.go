@@ -47,7 +47,7 @@ func New(send func(action, body, targetTag string) (string, error)) AlarmClock {
 	return AlarmClock{Send: send}
 }
 
-// Prefer methods “
+// Prefer method `h.CreateAlarm`.
 //
 // `recurrence` should be one of `Gonos.RecurrenceModes.*`
 //
@@ -56,6 +56,7 @@ func (s *AlarmClock) CreateAlarm(startLocalTime time.Time, seconds int, recurren
 	return s.Send("CreateAlarm", "<StartLocalTime>"+startLocalTime.Format("15:04:05")+"</StartLocalTime><Duration>"+time.Time.Add(time.Time{}, time.Second*time.Duration(max(0, seconds))).Format("15:04:05")+"</Duration><Recurrence>"+recurrence+"</Recurrence><Enabled>"+lib.BoolTo10(enabled)+"</Enabled><RoomUUID>"+roomUUID+"</RoomUUID><ProgramURI>"+programURI+"</ProgramURI><ProgramMetaData>"+programMetaData+"</ProgramMetaData><PlayMode>"+playMode+"</PlayMode><Volume>"+strconv.Itoa(max(0, min(100, volume)))+"</Volume><IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones>", "AssignedID")
 }
 
+// Prefer method `h.DestroyAlarm`.
 func (s *AlarmClock) DestroyAlarm(id int) error {
 	_, err := s.Send("DestroyAlarm", "<ID>"+strconv.Itoa(id)+"</ID>", "")
 	return err
@@ -67,12 +68,7 @@ func (s *AlarmClock) GetDailyIndexRefreshTime() (currentDailyIndexRefreshTime st
 
 func (s *AlarmClock) GetFormat() (getFormatResponse, error) {
 	res, err := s.Send("GetFormat", "", "s:Body")
-	if err != nil {
-		return getFormatResponse{}, err
-	}
-	data := getFormatResponse{}
-	err = xml.Unmarshal([]byte(res), &data)
-	return data, err
+	if err != nil {return getFormatResponse{}, err};data := getFormatResponse{};err = xml.Unmarshal([]byte(res), &data);return data, err
 }
 
 func (s *AlarmClock) GetHouseholdTimeAtStamp(timeStamp string) (householdUTCTime string, err error) {
@@ -153,7 +149,10 @@ func (s *AlarmClock) SetTimeZone(index int, autoAdjustDst bool) error {
 	return err
 }
 
+// Prefer method `h.UpdateAlarm`.
+//
 // `recurrence` should be one of `Gonos.RecurrenceModes.*`
+//
 // `playMode` should be one of `Gonos.PlayModes.*`
 func (s *AlarmClock) UpdateAlarm(id int, startLocalTime time.Time, seconds int, recurrence string, enabled bool, roomUUID string, programURI string, programMetaData string, playMode string, volume int, includeLinkedZones bool) error {
 	_, err := s.Send("UpdateAlarm", "<ID>"+strconv.Itoa(id)+"</ID><StartLocalTime>"+startLocalTime.Format("15:04:05")+"</StartLocalTime><Duration>"+time.Time.Add(time.Time{}, time.Second*time.Duration(max(0, seconds))).Format("15:04:05")+"</Duration><Recurrence>"+recurrence+"</Recurrence><Enabled>"+lib.BoolTo10(enabled)+"</Enabled><RoomUUID>"+roomUUID+"</RoomUUID><ProgramURI>"+programURI+"</ProgramURI><ProgramMetaData>"+programMetaData+"</ProgramMetaData><PlayMode>"+playMode+"</PlayMode><Volume>"+strconv.Itoa(max(0, min(100, volume)))+"</Volume><IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones>", "")

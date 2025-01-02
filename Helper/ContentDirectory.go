@@ -83,7 +83,7 @@ type (
 
 // Prefer methods `h.LibraryArtist`, `h.LibraryAlbumArtist`, `h.LibraryAlbum`, `h.LibraryGenre`, `h.LibraryComposer`, `h.LibraryTracks`, `h.LibraryPlaylists`.
 //
-// `objectID` may be one of `Gonos.lib.ContentTypes.*` or a custom id
+// `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
 func (h *Helper) BrowseMusicLibrary(objectID string) (LibraryInfo, error) {
 	info, err := h.contentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
 	if err != nil {
@@ -140,7 +140,7 @@ func (h *Helper) GetLibraryPlaylists() (LibraryInfo, error) {
 
 // Prefer methods `h.GetShare`, `h.GetSonosPlaylists`, `h.GetSonosFavorites`, `h.GetRadioStations` or `h.GetRadioShows`.
 //
-// `objectID` may be one of `Gonos.lib.ContentTypes.*` or a custom id
+// `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
 func (h *Helper) BrowsePlaylist(objectID string) (PLaylistInfo, error) {
 	info, err := h.contentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
 	if err != nil {
