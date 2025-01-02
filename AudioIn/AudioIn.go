@@ -36,7 +36,7 @@ func (s *AudioIn) GetAudioInputAttributes() (getAudioInputAttributesResponse, er
 	return data, err
 }
 
-// Prefer method `h.GetLineInLevel`, `h.GetLineInLevelLeft`, `h.GetLineInLevelRight`.
+// Prefer methods `h.GetLineInLevel`, `h.GetLineInLevelLeft`, `h.GetLineInLevelRight`.
 func (s *AudioIn) GetLineInLevel() (getLineInLevelResponse, error) {
 	res, err := s.Send("GetLineInLevel", "", "")
 	if err != nil {
