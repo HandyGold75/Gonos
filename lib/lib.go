@@ -10,10 +10,11 @@ import (
 )
 
 var (
-	ErrSonos = struct{ ErrUnexpectedResponse, ErrInvalidIPAdress, ErrNoZonePlayerFound, ErrInvalidEndpoint, ErrInvalidContentType, ErrInvalidPlayMode error }{
+	ErrSonos = struct{ ErrUnexpectedResponse, ErrInvalidIPAdress, ErrNoZonePlayerFound, ErrInvalidEndpoint, ErrTagNotFound, ErrInvalidContentType, ErrInvalidPlayMode error }{
 		ErrUnexpectedResponse: errors.New("unexpected response"),
 		ErrInvalidIPAdress:    errors.New("unable to discover zone player"),
 		ErrNoZonePlayerFound:  errors.New("unable to find zone player"),
+		ErrTagNotFound:        errors.New("tag not found in response"),
 		ErrInvalidEndpoint:    errors.New("invalid endpoint"),
 		ErrInvalidPlayMode:    errors.New("invalid play mode"),
 	}
@@ -65,6 +66,12 @@ var (
 		}
 		return m
 	}()
+	RecurrenceModes = struct{ Once, Weekdays, Weekends, Daily string }{
+		Once:     "ONCE",
+		Weekdays: "WEEKDAYS",
+		Weekends: "WEEKENDS",
+		Daily:    "DAILY",
+	}
 	AlbumArtistDisplayOptionModes = struct{ WMP, ITunes, None string }{
 		WMP:    "WMP",
 		ITunes: "ITUNES",
@@ -144,8 +151,23 @@ func ExtractTag(data, tag string) (string, error) {
 			return data[mid+1:], nil
 		}
 	}
-	return data, errors.New("Tag not found")
+	return data, ErrSonos.ErrTagNotFound
 }
+
+// func ExtractTags(data string, tags ...string) ([]string, error) {
+// 	ret := []string{}
+// 	for _, tag := range tags {
+// 		d, err := ExtractTag(data, tag)
+// 		if err != nil {
+// 			return ret, err
+// 		}
+// 		ret = append(ret, d)
+// 	}
+// 	if len(tags) != len(ret) {
+// 		return ret, ErrSonos.ErrTagNotFound
+// 	}
+// 	return ret, nil
+// }
 
 func BoolTo10(b bool) string {
 	if b {
