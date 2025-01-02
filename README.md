@@ -29,7 +29,7 @@ The available Sonos services are:
 - `zp.AlarmClock`
 - `zp.AudioIn`
 - `zp.AVTransport`
-- `zp.ConnectionManager` (Not yet implemented)
+- `zp.ConnectionManager`
 - `zp.ContentDirectory`
 - `zp.DeviceProperties`
 - `zp.GroupManagement` (Not yet implemented)
@@ -51,7 +51,7 @@ Some examples for controlling a Sonos device using the Sonos services:
 err := zp.AlarmClock.GetTimeServer() // Get the current time server.
 err := zp.AudioIn.SetLineInLevel(10, 10) // Set left and right line in level to 10.
 err := zp.AVTransport.Play() // Play current track.
-err := zp.ConnectionManager
+err := zp.ConnectionManager.GetCurrentConnectionIDs() // Get ids of current connections.
 queInfo, err := zp.ContentDirectory.Browse(Gonos.lib.ContentTypes.QueueMain, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "") // Get info of the current main que.
 zoneAttributes, err := zp.DeviceProperties.GetZoneAttributes() // Get attributes of current zone.
 err := zp.GroupManagement
