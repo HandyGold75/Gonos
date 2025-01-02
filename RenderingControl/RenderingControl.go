@@ -15,6 +15,18 @@ type (
 		Channel string
 	}
 
+	getRoomCalibrationStatusResponse struct {
+		XMLName                  xml.Name `xml:"GetRoomCalibrationStatusResponse"`
+		RoomCalibrationEnabled   bool
+		RoomCalibrationAvailable bool
+	}
+
+	getVolumeDBRangeResponse struct {
+		XMLName  xml.Name `xml:"GetVolumeDBRangeResponse"`
+		MinValue int
+		MaxValue int
+	}
+
 	resetBasicEQResponse struct {
 		XMLName     xml.Name `xml:"ResetBasicEQResponse"`
 		Bass        int
@@ -29,117 +41,97 @@ func New(send func(action, body, targetTag string) (string, error)) RenderingCon
 	return RenderingControl{Send: send, Channel: "Master"}
 }
 
-func (zp *RenderingControl) GetBass() (int, error) {
-	res, err := zp.Send("GetBass", "", "CurrentBass")
+func (s *RenderingControl) GetBass() (CurrentBass int, err error) {
+	res, err := s.Send("GetBass", "", "CurrentBass")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *RenderingControl) GetEQ(eQType string) (string, error) {
-	return zp.Send("GetEQ", "<EQType>"+eQType+"</EQType>", "CurrentValue")
+func (s *RenderingControl) GetEQ(eQType string) (CurrentValue string, err error) {
+	return s.Send("GetEQ", "<EQType>"+eQType+"</EQType>", "CurrentValue")
 }
 
-func (zp *RenderingControl) GetHeadphoneConnected() (bool, error) {
-	res, err := zp.Send("GetHeadphoneConnected", "", "CurrentHeadphoneConnected")
+func (s *RenderingControl) GetHeadphoneConnected() (CurrentHeadphoneConnected bool, err error) {
+	res, err := s.Send("GetHeadphoneConnected", "", "CurrentHeadphoneConnected")
 	return res == "1", err
 }
 
-func (zp *RenderingControl) GetLoudness() (bool, error) {
-	res, err := zp.Send("GetLoudness", "<Channel>"+zp.Channel+"</Channel>", "CurrentLoudness")
+func (s *RenderingControl) GetLoudness() (CurrentLoudness bool, err error) {
+	res, err := s.Send("GetLoudness", "<Channel>"+s.Channel+"</Channel>", "CurrentLoudness")
 	return res == "1", err
 }
 
-func (zp *RenderingControl) GetMute() (bool, error) {
-	res, err := zp.Send("GetMute", "<Channel>"+zp.Channel+"</Channel>", "CurrentMute")
+func (s *RenderingControl) GetMute() (CurrentMute bool, err error) {
+	res, err := s.Send("GetMute", "<Channel>"+s.Channel+"</Channel>", "CurrentMute")
 	return res == "1", err
 }
 
-func (zp *RenderingControl) GetOutputFixed() (bool, error) {
-	res, err := zp.Send("GetOutputFixed", "", "CurrentFixed")
+func (s *RenderingControl) GetOutputFixed() (CurrentFixed bool, err error) {
+	res, err := s.Send("GetOutputFixed", "", "CurrentFixed")
 	return res == "1", err
 }
 
-func (zp *RenderingControl) GetRoomCalibrationStatus() (bool, bool, error) {
-	res, err := zp.Send("GetRoomCalibrationStatus", "", "s:Body")
+func (s *RenderingControl) GetRoomCalibrationStatus() (getRoomCalibrationStatusResponse, error) {
+	res, err := s.Send("GetRoomCalibrationStatus", "", "s:Body")
 	if err != nil {
-		return false, false, err
+		return getRoomCalibrationStatusResponse{}, err
 	}
-	enabled, err := lib.ExtractTag(res, "RoomCalibrationEnabled")
-	if err != nil {
-		return false, false, err
-	}
-	available, err := lib.ExtractTag(res, "RoomCalibrationAvailable")
-	if err != nil {
-		return false, false, err
-	}
-	return enabled == "1", available == "1", err
+	data := getRoomCalibrationStatusResponse{}
+	err = xml.Unmarshal([]byte(res), &data)
+	return data, err
 }
 
-func (zp *RenderingControl) GetSupportsOutputFixed() (bool, error) {
-	res, err := zp.Send("GetSupportsOutputFixed", "", "CurrentSupportsFixed")
+func (s *RenderingControl) GetSupportsOutputFixed() (CurrentSupportsFixed bool, err error) {
+	res, err := s.Send("GetSupportsOutputFixed", "", "CurrentSupportsFixed")
 	return res == "1", err
 }
 
-func (zp *RenderingControl) GetTreble() (int, error) {
-	res, err := zp.Send("GetTreble", "", "CurrentTreble")
+func (s *RenderingControl) GetTreble() (CurrentTreble int, err error) {
+	res, err := s.Send("GetTreble", "", "CurrentTreble")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *RenderingControl) GetVolume() (int, error) {
-	res, err := zp.Send("GetVolume", "<Channel>"+zp.Channel+"</Channel>", "CurrentVolume")
+func (s *RenderingControl) GetVolume() (CurrentVolume int, err error) {
+	res, err := s.Send("GetVolume", "<Channel>"+s.Channel+"</Channel>", "CurrentVolume")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *RenderingControl) GetVolumeDB() (int, error) {
-	res, err := zp.Send("GetVolumeDB", "<Channel>"+zp.Channel+"</Channel>", "CurrentVolume")
+func (s *RenderingControl) GetVolumeDB() (CurrentVolume int, err error) {
+	res, err := s.Send("GetVolumeDB", "<Channel>"+s.Channel+"</Channel>", "CurrentVolume")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *RenderingControl) GetVolumeDBRange() (int, int, error) {
-	res, err := zp.Send("GetVolumeDBRange", "<Channel>"+zp.Channel+"</Channel>", "s:Body")
+func (s *RenderingControl) GetVolumeDBRange() (getVolumeDBRangeResponse, error) {
+	res, err := s.Send("GetVolumeDBRange", "<Channel>"+s.Channel+"</Channel>", "s:Body")
 	if err != nil {
-		return 0, 0, err
+		return getVolumeDBRangeResponse{}, err
 	}
-	minValue, err := lib.ExtractTag(res, "MinValue")
-	if err != nil {
-		return 0, 0, err
-	}
-	maxValue, err := lib.ExtractTag(res, "MaxValue")
-	if err != nil {
-		return 0, 0, err
-	}
-	minValueInt, err := strconv.Atoi(minValue)
-	if err != nil {
-		return 0, 0, err
-	}
-	maxValueInt, err := strconv.Atoi(maxValue)
-	if err != nil {
-		return 0, 0, err
-	}
-	return minValueInt, maxValueInt, err
+	data := getVolumeDBRangeResponse{}
+	err = xml.Unmarshal([]byte(res), &data)
+	return data, err
 }
 
-func (zp *RenderingControl) RampToVolume(rampType string, volume int, resetVolumeAfter bool, programURI string) (int, error) {
-	res, err := zp.Send("RampToVolume", "<Channel>"+zp.Channel+"</Channel><RampType>"+rampType+"</RampType><DesiredVolume>"+strconv.Itoa(max(0, min(100, volume)))+"</DesiredVolume><ResetVolumeAfter>"+lib.BoolTo10(resetVolumeAfter)+"</ResetVolumeAfter><ProgramURI>"+programURI+"</ProgramURI>", "RampTime")
+func (s *RenderingControl) RampToVolume(rampType string, volume int, resetVolumeAfter bool, programURI string) (RampTime int, err error) {
+	res, err := s.Send("RampToVolume", "<Channel>"+s.Channel+"</Channel><RampType>"+rampType+"</RampType><DesiredVolume>"+strconv.Itoa(max(0, min(100, volume)))+"</DesiredVolume><ResetVolumeAfter>"+lib.BoolTo10(resetVolumeAfter)+"</ResetVolumeAfter><ProgramURI>"+programURI+"</ProgramURI>", "RampTime")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *RenderingControl) ResetBasicEQ() (resetBasicEQResponse, error) {
-	res, err := zp.Send("ResetBasicEQ", "", "s:Body")
+func (s *RenderingControl) ResetBasicEQ() (resetBasicEQResponse, error) {
+	res, err := s.Send("ResetBasicEQ", "", "s:Body")
 	if err != nil {
 		return resetBasicEQResponse{}, err
 	}
@@ -148,75 +140,75 @@ func (zp *RenderingControl) ResetBasicEQ() (resetBasicEQResponse, error) {
 	return data, err
 }
 
-func (zp *RenderingControl) ResetExtEQ(eQType string) error {
-	_, err := zp.Send("ResetExtEQ", "<EQType>"+eQType+"</EQType>", "")
+func (s *RenderingControl) ResetExtEQ(eQType string) error {
+	_, err := s.Send("ResetExtEQ", "<EQType>"+eQType+"</EQType>", "")
 	return err
 }
 
-func (zp *RenderingControl) RestoreVolumePriorToRamp() error {
-	_, err := zp.Send("RestoreVolumePriorToRamp", "<Channel>"+zp.Channel+"</Channel>", "")
+func (s *RenderingControl) RestoreVolumePriorToRamp() error {
+	_, err := s.Send("RestoreVolumePriorToRamp", "<Channel>"+s.Channel+"</Channel>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetBass(volume int) error {
-	_, err := zp.Send("SetBass", "<DesiredBass>"+strconv.Itoa(max(-10, min(10, volume)))+"</DesiredBass>", "")
+func (s *RenderingControl) SetBass(volume int) error {
+	_, err := s.Send("SetBass", "<DesiredBass>"+strconv.Itoa(max(-10, min(10, volume)))+"</DesiredBass>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetChannelMap(channelMap string) error {
-	_, err := zp.Send("SetChannelMap", "<ChannelMap>"+channelMap+"</ChannelMap>", "")
+func (s *RenderingControl) SetChannelMap(channelMap string) error {
+	_, err := s.Send("SetChannelMap", "<ChannelMap>"+channelMap+"</ChannelMap>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetEQ(eQType string, state string) error {
-	_, err := zp.Send("SetEQ", "<EQType>"+eQType+"</EQType><DesiredValue>"+state+"</DesiredValue>", "")
+func (s *RenderingControl) SetEQ(eQType string, state string) error {
+	_, err := s.Send("SetEQ", "<EQType>"+eQType+"</EQType><DesiredValue>"+state+"</DesiredValue>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetLoudness(state bool) error {
-	_, err := zp.Send("SetLoudness", "<Channel>"+zp.Channel+"</Channel><DesiredLoudness>"+lib.BoolTo10(state)+"</DesiredLoudness>", "")
+func (s *RenderingControl) SetLoudness(state bool) error {
+	_, err := s.Send("SetLoudness", "<Channel>"+s.Channel+"</Channel><DesiredLoudness>"+lib.BoolTo10(state)+"</DesiredLoudness>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetMute(state bool) error {
-	_, err := zp.Send("SetMute", "<Channel>"+zp.Channel+"</Channel><DesiredMute>"+lib.BoolTo10(state)+"</DesiredMute>", "")
+func (s *RenderingControl) SetMute(state bool) error {
+	_, err := s.Send("SetMute", "<Channel>"+s.Channel+"</Channel><DesiredMute>"+lib.BoolTo10(state)+"</DesiredMute>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetOutputFixed(state bool) error {
-	_, err := zp.Send("SetOutputFixed", "<DesiredFixed>"+lib.BoolTo10(state)+"</DesiredFixed>", "")
+func (s *RenderingControl) SetOutputFixed(state bool) error {
+	_, err := s.Send("SetOutputFixed", "<DesiredFixed>"+lib.BoolTo10(state)+"</DesiredFixed>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetRelativeVolume(volume int) (int, error) {
-	res, err := zp.Send("SetRelativeVolume", "<Channel>"+zp.Channel+"</Channel><Adjustment>"+strconv.Itoa(max(-100, min(100, volume)))+"</Adjustment>", "NewVolume")
+func (s *RenderingControl) SetRelativeVolume(volume int) (NewVolume int, err error) {
+	res, err := s.Send("SetRelativeVolume", "<Channel>"+s.Channel+"</Channel><Adjustment>"+strconv.Itoa(max(-100, min(100, volume)))+"</Adjustment>", "NewVolume")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *RenderingControl) SetRoomCalibrationStatus(state bool) error {
-	_, err := zp.Send("SetRoomCalibrationStatus", "<RoomCalibrationEnabled>"+lib.BoolTo10(state)+"</RoomCalibrationEnabled>", "")
+func (s *RenderingControl) SetRoomCalibrationStatus(state bool) error {
+	_, err := s.Send("SetRoomCalibrationStatus", "<RoomCalibrationEnabled>"+lib.BoolTo10(state)+"</RoomCalibrationEnabled>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetRoomCalibrationX(calibrationID string, coeddicients string, calibrationMode string) error {
-	_, err := zp.Send("SetRoomCalibrationX", "<CalibrationID>"+calibrationID+"</CalibrationID><Coefficients>"+coeddicients+"</Coefficients><CalibrationMode>"+calibrationMode+"</CalibrationMode>", "")
+func (s *RenderingControl) SetRoomCalibrationX(calibrationID string, coeddicients string, calibrationMode string) error {
+	_, err := s.Send("SetRoomCalibrationX", "<CalibrationID>"+calibrationID+"</CalibrationID><Coefficients>"+coeddicients+"</Coefficients><CalibrationMode>"+calibrationMode+"</CalibrationMode>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetTreble(volume int) error {
-	_, err := zp.Send("SetTreble", "<DesiredTreble>"+strconv.Itoa(max(-10, min(10, volume)))+"</DesiredTreble>", "")
+func (s *RenderingControl) SetTreble(volume int) error {
+	_, err := s.Send("SetTreble", "<DesiredTreble>"+strconv.Itoa(max(-10, min(10, volume)))+"</DesiredTreble>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetVolume(volume int) error {
-	_, err := zp.Send("SetVolume", "<Channel>"+zp.Channel+"</Channel><DesiredVolume>"+strconv.Itoa(max(0, min(100, volume)))+"</DesiredVolume>", "")
+func (s *RenderingControl) SetVolume(volume int) error {
+	_, err := s.Send("SetVolume", "<Channel>"+s.Channel+"</Channel><DesiredVolume>"+strconv.Itoa(max(0, min(100, volume)))+"</DesiredVolume>", "")
 	return err
 }
 
-func (zp *RenderingControl) SetVolumeDB(volume int) error {
-	_, err := zp.Send("SetVolumeDB", "<Channel>"+zp.Channel+"</Channel><DesiredVolume>"+strconv.Itoa(max(0, min(100, volume)))+"</DesiredVolume>", "")
+func (s *RenderingControl) SetVolumeDB(volume int) error {
+	_, err := s.Send("SetVolumeDB", "<Channel>"+s.Channel+"</Channel><DesiredVolume>"+strconv.Itoa(max(0, min(100, volume)))+"</DesiredVolume>", "")
 	return err
 }

@@ -28,8 +28,8 @@ type (
 		ObjectID string
 		Result   string
 	}
-	findPrefix struct {
-		XMLName       xml.Name `xml:"FindPrefix"`
+	findPrefixResponse struct {
+		XMLName       xml.Name `xml:"FindPrefixResponse"`
 		StartingIndex int
 		UpdateID      int
 	}
@@ -48,8 +48,8 @@ func New(send func(action, body, targetTag string) (string, error)) ContentDirec
 // Prefer methods `zp.BrowseMusicLibrary`, `zp.BrowsePlaylist`, `zp.BrowseQue`.
 //
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
-func (zp *ContentDirectory) Browse(objectID string, browseFlag string, filter string, startingIndex int, requestedCount int, sortCriteria string) (browseResponse, error) {
-	res, err := zp.Send("Browse", "<ObjectID>"+objectID+"</ObjectID><BrowseFlag>"+browseFlag+"</BrowseFlag><Filter>"+filter+"</Filter><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><RequestedCount>"+strconv.Itoa(requestedCount)+"</RequestedCount><SortCriteria>"+sortCriteria+"</SortCriteria>", "s:Body")
+func (s *ContentDirectory) Browse(objectID string, browseFlag string, filter string, startingIndex int, requestedCount int, sortCriteria string) (browseResponse, error) {
+	res, err := s.Send("Browse", "<ObjectID>"+objectID+"</ObjectID><BrowseFlag>"+browseFlag+"</BrowseFlag><Filter>"+filter+"</Filter><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><RequestedCount>"+strconv.Itoa(requestedCount)+"</RequestedCount><SortCriteria>"+sortCriteria+"</SortCriteria>", "s:Body")
 	if err != nil {
 		return browseResponse{}, err
 	}
@@ -58,8 +58,8 @@ func (zp *ContentDirectory) Browse(objectID string, browseFlag string, filter st
 	return data, err
 }
 
-func (zp *ContentDirectory) CreateObject(containerID string, elements string) (createObjectResponse, error) {
-	res, err := zp.Send("CreateObject", "<ContainerID>"+containerID+"</ContainerID><Elements>"+elements+"</Elements>", "s:Body")
+func (s *ContentDirectory) CreateObject(containerID string, elements string) (createObjectResponse, error) {
+	res, err := s.Send("CreateObject", "<ContainerID>"+containerID+"</ContainerID><Elements>"+elements+"</Elements>", "s:Body")
 	if err != nil {
 		return createObjectResponse{}, err
 	}
@@ -69,30 +69,30 @@ func (zp *ContentDirectory) CreateObject(containerID string, elements string) (c
 }
 
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
-func (zp *ContentDirectory) DestroyObject(objectID string) error {
-	_, err := zp.Send("DestroyObject", "<ObjectID>"+objectID+"</ObjectID>", "")
+func (s *ContentDirectory) DestroyObject(objectID string) error {
+	_, err := s.Send("DestroyObject", "<ObjectID>"+objectID+"</ObjectID>", "")
 	return err
 }
 
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
-func (zp *ContentDirectory) FindPrefix(objectID string, prefix string) (findPrefix, error) {
-	res, err := zp.Send("FindPrefix", "<ObjectID>"+objectID+"</ObjectID><Prefix>"+prefix+"</Prefix>", "s:Body")
+func (s *ContentDirectory) FindPrefix(objectID string, prefix string) (findPrefixResponse, error) {
+	res, err := s.Send("FindPrefix", "<ObjectID>"+objectID+"</ObjectID><Prefix>"+prefix+"</Prefix>", "s:Body")
 	if err != nil {
-		return findPrefix{}, err
+		return findPrefixResponse{}, err
 	}
-	data := findPrefix{}
+	data := findPrefixResponse{}
 	err = xml.Unmarshal([]byte(res), &data)
 	return data, err
 }
 
 // Returns one of `WMP`, `ITUNES` or `NONE`
-func (zp *ContentDirectory) GetAlbumArtistDisplayOption() (string, error) {
-	return zp.Send("GetAlbumArtistDisplayOption", "", "AlbumArtistDisplayOption")
+func (s *ContentDirectory) GetAlbumArtistDisplayOption() (AlbumArtistDisplayOption string, err error) {
+	return s.Send("GetAlbumArtistDisplayOption", "", "AlbumArtistDisplayOption")
 }
 
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
-func (zp *ContentDirectory) GetAllPrefixLocations(objectID string) (getAllPrefixLocationsResponse, error) {
-	res, err := zp.Send("GetAllPrefixLocations", "<ObjectID>"+objectID+"</ObjectID>", "s:Body")
+func (s *ContentDirectory) GetAllPrefixLocations(objectID string) (getAllPrefixLocationsResponse, error) {
+	res, err := s.Send("GetAllPrefixLocations", "<ObjectID>"+objectID+"</ObjectID>", "s:Body")
 	if err != nil {
 		return getAllPrefixLocationsResponse{}, err
 	}
@@ -101,59 +101,59 @@ func (zp *ContentDirectory) GetAllPrefixLocations(objectID string) (getAllPrefix
 	return data, err
 }
 
-func (zp *ContentDirectory) GetBrowseable() (bool, error) {
-	res, err := zp.Send("GetBrowseable", "", "IsBrowseable")
+func (s *ContentDirectory) GetBrowseable() (IsBrowseable bool, err error) {
+	res, err := s.Send("GetBrowseable", "", "IsBrowseable")
 	return res == "1", err
 }
 
-func (zp *ContentDirectory) GetLastIndexChange() (time.Time, error) {
-	res, err := zp.Send("GetLastIndexChange", "", "LastIndexChange")
+func (s *ContentDirectory) GetLastIndexChange() (LastIndexChange time.Time, err error) {
+	res, err := s.Send("GetLastIndexChange", "", "LastIndexChange")
 	if err != nil {
 		return time.Time{}, err
 	}
 	return time.Parse("S"+time.DateTime, res)
 }
 
-func (zp *ContentDirectory) GetSearchCapabilities() (string, error) {
-	return zp.Send("GetSearchCapabilities", "", "SearchCaps")
+func (s *ContentDirectory) GetSearchCapabilities() (SearchCaps string, err error) {
+	return s.Send("GetSearchCapabilities", "", "SearchCaps")
 }
 
-func (zp *ContentDirectory) GetShareIndexInProgress() (bool, error) {
-	res, err := zp.Send("GetShareIndexInProgress", "", "IsIndexing")
+func (s *ContentDirectory) GetShareIndexInProgress() (IsIndexing bool, err error) {
+	res, err := s.Send("GetShareIndexInProgress", "", "IsIndexing")
 	return res == "1", err
 }
 
-func (zp *ContentDirectory) GetSortCapabilities() (string, error) {
-	return zp.Send("GetSortCapabilities", "", "SortCaps")
+func (s *ContentDirectory) GetSortCapabilities() (SortCaps string, err error) {
+	return s.Send("GetSortCapabilities", "", "SortCaps")
 }
 
-func (zp *ContentDirectory) GetSystemUpdateID() (int, error) {
-	res, err := zp.Send("GetSystemUpdateID", "", "Id")
+func (s *ContentDirectory) GetSystemUpdateID() (Id int, err error) {
+	res, err := s.Send("GetSystemUpdateID", "", "Id")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-// `albumArtistDisplayOption` should be one of `zp.AlbumArtistDisplayOptionModes.*`.
-func (zp *ContentDirectory) RefreshShareIndex(albumArtistDisplayOption string) error {
-	_, err := zp.Send("RefreshShareIndex", "<AlbumArtistDisplayOption>"+albumArtistDisplayOption+"</AlbumArtistDisplayOption>", "")
+// `albumArtistDisplayOption` should be one of `s.AlbumArtistDisplayOptionModes.*`.
+func (s *ContentDirectory) RefreshShareIndex(albumArtistDisplayOption string) error {
+	_, err := s.Send("RefreshShareIndex", "<AlbumArtistDisplayOption>"+albumArtistDisplayOption+"</AlbumArtistDisplayOption>", "")
 	return err
 }
 
-func (zp *ContentDirectory) RequestResort(sortOrder string) error {
-	_, err := zp.Send("RequestResort", "<SortOrder>sortOrder</SortOrder>", "")
+func (s *ContentDirectory) RequestResort(sortOrder string) error {
+	_, err := s.Send("RequestResort", "<SortOrder>sortOrder</SortOrder>", "")
 	return err
 }
 
-func (zp *ContentDirectory) SetBrowseable(state bool) error {
-	_, err := zp.Send("SetBrowseable", "<Browseable>"+lib.BoolTo10(state)+"</Browseable>", "")
+func (s *ContentDirectory) SetBrowseable(state bool) error {
+	_, err := s.Send("SetBrowseable", "<Browseable>"+lib.BoolTo10(state)+"</Browseable>", "")
 	return err
 }
 
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
-func (zp *ContentDirectory) UpdateObject(objectID string, currentTagValue string, newTagValue string) error {
-	out, err := zp.Send("UpdateObject", "<ObjectID>"+objectID+"</ObjectID><CurrentTagValue>"+currentTagValue+"</CurrentTagValue><NewTagValue>"+newTagValue+"</NewTagValue>", "")
+func (s *ContentDirectory) UpdateObject(objectID string, currentTagValue string, newTagValue string) error {
+	out, err := s.Send("UpdateObject", "<ObjectID>"+objectID+"</ObjectID><CurrentTagValue>"+currentTagValue+"</CurrentTagValue><NewTagValue>"+newTagValue+"</NewTagValue>", "")
 	fmt.Println(out)
 	return err
 }

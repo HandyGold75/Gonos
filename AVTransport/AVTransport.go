@@ -134,8 +134,8 @@ func New(send func(action, body, targetTag string) (string, error)) AVTransport 
 	return AVTransport{Send: send, Speed: 1, UpdateID: 0}
 }
 
-func (zp *AVTransport) AddMultipleURIsToQueue(numberOfURIs int, enqueuedURIs string, enqueuedURIsMetaData string, containerURI string, containerMetaData string, desiredFirstTrackNumberEnqueued int, enqueueAsNext bool) (addMultipleURIsToQueueResponse, error) {
-	res, err := zp.Send("AddMultipleURIsToQueue", "<UpdateID>"+strconv.Itoa(zp.UpdateID)+"</UpdateID><NumberOfURIs>"+strconv.Itoa(numberOfURIs)+"</NumberOfURIs><EnqueuedURIs>"+enqueuedURIs+"</EnqueuedURIs><EnqueuedURIsMetaData>"+enqueuedURIsMetaData+"</EnqueuedURIsMetaData><ContainerURI>"+containerURI+"</ContainerURI><ContainerMetaData>"+containerMetaData+"</ContainerMetaData><DesiredFirstTrackNumberEnqueued>"+strconv.Itoa(desiredFirstTrackNumberEnqueued)+"</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>"+lib.BoolTo10(enqueueAsNext)+"</EnqueueAsNext>", "s:Body")
+func (s *AVTransport) AddMultipleURIsToQueue(numberOfURIs int, enqueuedURIs string, enqueuedURIsMetaData string, containerURI string, containerMetaData string, desiredFirstTrackNumberEnqueued int, enqueueAsNext bool) (addMultipleURIsToQueueResponse, error) {
+	res, err := s.Send("AddMultipleURIsToQueue", "<UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><NumberOfURIs>"+strconv.Itoa(numberOfURIs)+"</NumberOfURIs><EnqueuedURIs>"+enqueuedURIs+"</EnqueuedURIs><EnqueuedURIsMetaData>"+enqueuedURIsMetaData+"</EnqueuedURIsMetaData><ContainerURI>"+containerURI+"</ContainerURI><ContainerMetaData>"+containerMetaData+"</ContainerMetaData><DesiredFirstTrackNumberEnqueued>"+strconv.Itoa(desiredFirstTrackNumberEnqueued)+"</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>"+lib.BoolTo10(enqueueAsNext)+"</EnqueueAsNext>", "s:Body")
 	if err != nil {
 		return addMultipleURIsToQueueResponse{}, err
 	}
@@ -144,8 +144,8 @@ func (zp *AVTransport) AddMultipleURIsToQueue(numberOfURIs int, enqueuedURIs str
 	return data, err
 }
 
-func (zp *AVTransport) AddURIToQueue(enqueuedURI string, enqueuedURIMetaData string, desiredFirstTrackNumberEnqueued int, enqueueAsNext bool) (addURIToQueueResponse, error) {
-	res, err := zp.Send("AddURIToQueue", "<EnqueuedURI>"+enqueuedURI+"</EnqueuedURI><EnqueuedURIMetaData>"+enqueuedURIMetaData+"</EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>"+strconv.Itoa(desiredFirstTrackNumberEnqueued)+"</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>"+lib.BoolTo10(enqueueAsNext)+"</EnqueueAsNext>", "s:Body")
+func (s *AVTransport) AddURIToQueue(enqueuedURI string, enqueuedURIMetaData string, desiredFirstTrackNumberEnqueued int, enqueueAsNext bool) (addURIToQueueResponse, error) {
+	res, err := s.Send("AddURIToQueue", "<EnqueuedURI>"+enqueuedURI+"</EnqueuedURI><EnqueuedURIMetaData>"+enqueuedURIMetaData+"</EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>"+strconv.Itoa(desiredFirstTrackNumberEnqueued)+"</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>"+lib.BoolTo10(enqueueAsNext)+"</EnqueueAsNext>", "s:Body")
 	if err != nil {
 		return addURIToQueueResponse{}, err
 	}
@@ -155,8 +155,8 @@ func (zp *AVTransport) AddURIToQueue(enqueuedURI string, enqueuedURIMetaData str
 }
 
 // `contentType` should be one of `Gonos.ContentTypes.*`
-func (zp *AVTransport) AddURIToSavedQueue(contentType string, enqueuedURI string, enqueuedURIMetaData string, addAtIndex int) (addURIToSavedQueueResponse, error) {
-	res, err := zp.Send("AddURIToSavedQueue", "<ObjectID>"+contentType+"</ObjectID><UpdateID>"+strconv.Itoa(zp.UpdateID)+"</UpdateID><EnqueuedURI>"+enqueuedURI+"</EnqueuedURI><EnqueuedURIMetaData>"+enqueuedURIMetaData+"</EnqueuedURIMetaData><AddAtIndex>"+strconv.Itoa(addAtIndex)+"</AddAtIndex>", "s:Body")
+func (s *AVTransport) AddURIToSavedQueue(contentType string, enqueuedURI string, enqueuedURIMetaData string, addAtIndex int) (addURIToSavedQueueResponse, error) {
+	res, err := s.Send("AddURIToSavedQueue", "<ObjectID>"+contentType+"</ObjectID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><EnqueuedURI>"+enqueuedURI+"</EnqueuedURI><EnqueuedURIMetaData>"+enqueuedURIMetaData+"</EnqueuedURIMetaData><AddAtIndex>"+strconv.Itoa(addAtIndex)+"</AddAtIndex>", "s:Body")
 	if err != nil {
 		return addURIToSavedQueueResponse{}, err
 	}
@@ -165,13 +165,13 @@ func (zp *AVTransport) AddURIToSavedQueue(contentType string, enqueuedURI string
 	return data, err
 }
 
-func (zp *AVTransport) BackupQueue() error {
-	_, err := zp.Send("BackupQueue", "", "")
+func (s *AVTransport) BackupQueue() error {
+	_, err := s.Send("BackupQueue", "", "")
 	return err
 }
 
-func (zp *AVTransport) BecomeCoordinatorOfStandaloneGroup() (becomeCoordinatorOfStandaloneGroupResponse, error) {
-	res, err := zp.Send("BecomeCoordinatorOfStandaloneGroup", "", "s:Body")
+func (s *AVTransport) BecomeCoordinatorOfStandaloneGroup() (becomeCoordinatorOfStandaloneGroupResponse, error) {
+	res, err := s.Send("BecomeCoordinatorOfStandaloneGroup", "", "s:Body")
 	if err != nil {
 		return becomeCoordinatorOfStandaloneGroupResponse{}, err
 	}
@@ -180,33 +180,33 @@ func (zp *AVTransport) BecomeCoordinatorOfStandaloneGroup() (becomeCoordinatorOf
 	return data, err
 }
 
-func (zp *AVTransport) BecomeGroupCoordinator(currentCoordinator string, currentGroupID string, otherMembers string, transportSettings string, currentURI string, currentURIMetaData string, sleepTimerState string, alarmState string, streamRestartState string, currentQueueTrackList string, currentVLIState string) error {
-	_, err := zp.Send("BecomeGroupCoordinator", "<CurrentCoordinator>"+currentCoordinator+"</CurrentCoordinator><CurrentGroupID>"+currentGroupID+"</CurrentGroupID><OtherMembers>"+otherMembers+"</OtherMembers><TransportSettings>"+transportSettings+"</TransportSettings><CurrentURI>"+currentURI+"</CurrentURI><CurrentURIMetaData>"+currentURIMetaData+"</CurrentURIMetaData><SleepTimerState>"+sleepTimerState+"</SleepTimerState><AlarmState>"+alarmState+"</AlarmState><StreamRestartState>"+streamRestartState+"</StreamRestartState><CurrentQueueTrackList>"+currentQueueTrackList+"</CurrentQueueTrackList><CurrentVLIState>"+currentVLIState+"</CurrentVLIState>", "")
+func (s *AVTransport) BecomeGroupCoordinator(currentCoordinator string, currentGroupID string, otherMembers string, transportSettings string, currentURI string, currentURIMetaData string, sleepTimerState string, alarmState string, streamRestartState string, currentQueueTrackList string, currentVLIState string) error {
+	_, err := s.Send("BecomeGroupCoordinator", "<CurrentCoordinator>"+currentCoordinator+"</CurrentCoordinator><CurrentGroupID>"+currentGroupID+"</CurrentGroupID><OtherMembers>"+otherMembers+"</OtherMembers><TransportSettings>"+transportSettings+"</TransportSettings><CurrentURI>"+currentURI+"</CurrentURI><CurrentURIMetaData>"+currentURIMetaData+"</CurrentURIMetaData><SleepTimerState>"+sleepTimerState+"</SleepTimerState><AlarmState>"+alarmState+"</AlarmState><StreamRestartState>"+streamRestartState+"</StreamRestartState><CurrentQueueTrackList>"+currentQueueTrackList+"</CurrentQueueTrackList><CurrentVLIState>"+currentVLIState+"</CurrentVLIState>", "")
 	return err
 }
 
-func (zp *AVTransport) BecomeGroupCoordinatorAndSource(currentCoordinator string, currentGroupID string, otherMembers string, currentURI string, currentURIMetaData string, sleepTimerState string, alarmState string, streamRestartState string, currentAVTTrackList string, currentQueueTrackList string, currentSourceState string, resumePlayback bool) error {
-	_, err := zp.Send("BecomeGroupCoordinatorAndSource", "<CurrentCoordinator>"+currentCoordinator+"</CurrentCoordinator><CurrentGroupID>"+currentGroupID+"</CurrentGroupID><OtherMembers>"+otherMembers+"</OtherMembers><CurrentURI>"+currentURI+"</CurrentURI><CurrentURIMetaData>"+currentURIMetaData+"</CurrentURIMetaData><SleepTimerState>"+sleepTimerState+"</SleepTimerState><AlarmState>"+alarmState+"</AlarmState><StreamRestartState>"+streamRestartState+"</StreamRestartState><CurrentAVTTrackList>"+currentAVTTrackList+"</CurrentAVTTrackList><CurrentQueueTrackList>"+currentQueueTrackList+"</CurrentQueueTrackList><CurrentSourceState>"+currentSourceState+"</CurrentSourceState><ResumePlayback>"+lib.BoolTo10(resumePlayback)+"</ResumePlayback>", "")
+func (s *AVTransport) BecomeGroupCoordinatorAndSource(currentCoordinator string, currentGroupID string, otherMembers string, currentURI string, currentURIMetaData string, sleepTimerState string, alarmState string, streamRestartState string, currentAVTTrackList string, currentQueueTrackList string, currentSourceState string, resumePlayback bool) error {
+	_, err := s.Send("BecomeGroupCoordinatorAndSource", "<CurrentCoordinator>"+currentCoordinator+"</CurrentCoordinator><CurrentGroupID>"+currentGroupID+"</CurrentGroupID><OtherMembers>"+otherMembers+"</OtherMembers><CurrentURI>"+currentURI+"</CurrentURI><CurrentURIMetaData>"+currentURIMetaData+"</CurrentURIMetaData><SleepTimerState>"+sleepTimerState+"</SleepTimerState><AlarmState>"+alarmState+"</AlarmState><StreamRestartState>"+streamRestartState+"</StreamRestartState><CurrentAVTTrackList>"+currentAVTTrackList+"</CurrentAVTTrackList><CurrentQueueTrackList>"+currentQueueTrackList+"</CurrentQueueTrackList><CurrentSourceState>"+currentSourceState+"</CurrentSourceState><ResumePlayback>"+lib.BoolTo10(resumePlayback)+"</ResumePlayback>", "")
 	return err
 }
 
-func (zp *AVTransport) ChangeCoordinator(currentCoordinator string, newCoordinator string, newTransportSettings string, currentAVTransportURI string) error {
-	_, err := zp.Send("ChangeCoordinator", "<CurrentCoordinator>"+currentCoordinator+"</CurrentCoordinator><NewCoordinator>"+newCoordinator+"</NewCoordinator><NewTransportSettings>"+newTransportSettings+"</NewTransportSettings><CurrentAVTransportURI>"+currentAVTransportURI+"</CurrentAVTransportURI>", "")
+func (s *AVTransport) ChangeCoordinator(currentCoordinator string, newCoordinator string, newTransportSettings string, currentAVTransportURI string) error {
+	_, err := s.Send("ChangeCoordinator", "<CurrentCoordinator>"+currentCoordinator+"</CurrentCoordinator><NewCoordinator>"+newCoordinator+"</NewCoordinator><NewTransportSettings>"+newTransportSettings+"</NewTransportSettings><CurrentAVTransportURI>"+currentAVTransportURI+"</CurrentAVTransportURI>", "")
 	return err
 }
 
-func (zp *AVTransport) ChangeTransportSettings(newTransportSettings string, currentAVTransportURI string) error {
-	_, err := zp.Send("ChangeTransportSettings", "<NewTransportSettings>"+newTransportSettings+"</NewTransportSettings><CurrentAVTransportURI>"+currentAVTransportURI+"</CurrentAVTransportURI>", "")
+func (s *AVTransport) ChangeTransportSettings(newTransportSettings string, currentAVTransportURI string) error {
+	_, err := s.Send("ChangeTransportSettings", "<NewTransportSettings>"+newTransportSettings+"</NewTransportSettings><CurrentAVTransportURI>"+currentAVTransportURI+"</CurrentAVTransportURI>", "")
 	return err
 }
 
-func (zp *AVTransport) ConfigureSleepTimer(seconds int) error {
-	_, err := zp.Send("ConfigureSleepTimer", "<NewSleepTimerDuration>"+time.Time.Add(time.Time{}, time.Second*time.Duration(seconds)).Format("15:04:05")+"</NewSleepTimerDuration>", "")
+func (s *AVTransport) ConfigureSleepTimer(seconds int) error {
+	_, err := s.Send("ConfigureSleepTimer", "<NewSleepTimerDuration>"+time.Time.Add(time.Time{}, time.Second*time.Duration(seconds)).Format("15:04:05")+"</NewSleepTimerDuration>", "")
 	return err
 }
 
-func (zp *AVTransport) CreateSavedQueue(title string, enqueuedURI string, enqueuedURIMetaData string) (createSavedQueueResponse, error) {
-	res, err := zp.Send("CreateSavedQueue", "<Title>title</Title><EnqueuedURI>enqueuedURI</EnqueuedURI><EnqueuedURIMetaData>enqueuedURIMetaData</EnqueuedURIMetaData>", "s:Body")
+func (s *AVTransport) CreateSavedQueue(title string, enqueuedURI string, enqueuedURIMetaData string) (createSavedQueueResponse, error) {
+	res, err := s.Send("CreateSavedQueue", "<Title>title</Title><EnqueuedURI>enqueuedURI</EnqueuedURI><EnqueuedURIMetaData>enqueuedURIMetaData</EnqueuedURIMetaData>", "s:Body")
 	if err != nil {
 		return createSavedQueueResponse{}, err
 	}
@@ -215,27 +215,27 @@ func (zp *AVTransport) CreateSavedQueue(title string, enqueuedURI string, enqueu
 	return data, err
 }
 
-func (zp *AVTransport) DelegateGroupCoordinationTo(newCoordinator string, rejoinGroup bool) error {
-	_, err := zp.Send("DelegateGroupCoordinationTo", "<NewCoordinator>"+newCoordinator+"</NewCoordinator><RejoinGroup>"+lib.BoolTo10(rejoinGroup)+"</RejoinGroup>", "")
+func (s *AVTransport) DelegateGroupCoordinationTo(newCoordinator string, rejoinGroup bool) error {
+	_, err := s.Send("DelegateGroupCoordinationTo", "<NewCoordinator>"+newCoordinator+"</NewCoordinator><RejoinGroup>"+lib.BoolTo10(rejoinGroup)+"</RejoinGroup>", "")
 	return err
 }
 
-func (zp *AVTransport) EndDirectControlSession() error {
-	_, err := zp.Send("EndDirectControlSession", "", "")
+func (s *AVTransport) EndDirectControlSession() error {
+	_, err := s.Send("EndDirectControlSession", "", "")
 	return err
 }
 
-func (zp *AVTransport) GetCrossfadeMode() (bool, error) {
-	res, err := zp.Send("GetCrossfadeMode", "", "CrossfadeMode")
+func (s *AVTransport) GetCrossfadeMode() (CrossfadeMode bool, err error) {
+	res, err := s.Send("GetCrossfadeMode", "", "CrossfadeMode")
 	return res == "1", err
 }
 
-func (zp *AVTransport) GetCurrentTransportActions() (string, error) {
-	return zp.Send("GetCurrentTransportActions", "", "Actions")
+func (s *AVTransport) GetCurrentTransportActions() (Actions string, err error) {
+	return s.Send("GetCurrentTransportActions", "", "Actions")
 }
 
-func (zp *AVTransport) GetDeviceCapabilities() (getDeviceCapabilitiesResponse, error) {
-	res, err := zp.Send("GetDeviceCapabilities", "", "s:Body")
+func (s *AVTransport) GetDeviceCapabilities() (getDeviceCapabilitiesResponse, error) {
+	res, err := s.Send("GetDeviceCapabilities", "", "s:Body")
 	if err != nil {
 		return getDeviceCapabilitiesResponse{}, err
 	}
@@ -244,8 +244,8 @@ func (zp *AVTransport) GetDeviceCapabilities() (getDeviceCapabilitiesResponse, e
 	return data, err
 }
 
-func (zp *AVTransport) GetMediaInfo() (getMediaInfoResponse, error) {
-	res, err := zp.Send("GetMediaInfo", "", "s:Body")
+func (s *AVTransport) GetMediaInfo() (getMediaInfoResponse, error) {
+	res, err := s.Send("GetMediaInfo", "", "s:Body")
 	if err != nil {
 		return getMediaInfoResponse{}, err
 	}
@@ -262,8 +262,8 @@ func (zp *AVTransport) GetMediaInfo() (getMediaInfoResponse, error) {
 	return data, err
 }
 
-func (zp *AVTransport) GetPositionInfo() (getPositionInfoResponse, error) {
-	res, err := zp.Send("GetPositionInfo", "", "s:Body")
+func (s *AVTransport) GetPositionInfo() (getPositionInfoResponse, error) {
+	res, err := s.Send("GetPositionInfo", "", "s:Body")
 	if err != nil {
 		return getPositionInfoResponse{}, err
 	}
@@ -276,8 +276,8 @@ func (zp *AVTransport) GetPositionInfo() (getPositionInfoResponse, error) {
 	return data, err
 }
 
-func (zp *AVTransport) GetRemainingSleepTimerDuration() (getRemainingSleepTimerDurationResponse, error) {
-	res, err := zp.Send("GetRemainingSleepTimerDuration", "", "s:Body")
+func (s *AVTransport) GetRemainingSleepTimerDuration() (getRemainingSleepTimerDurationResponse, error) {
+	res, err := s.Send("GetRemainingSleepTimerDuration", "", "s:Body")
 	if err != nil {
 		return getRemainingSleepTimerDurationResponse{}, err
 	}
@@ -286,8 +286,8 @@ func (zp *AVTransport) GetRemainingSleepTimerDuration() (getRemainingSleepTimerD
 	return data, err
 }
 
-func (zp *AVTransport) GetRunningAlarmProperties() (getRunningAlarmPropertiesResponse, error) {
-	res, err := zp.Send("GetRunningAlarmProperties", "", "s:Body")
+func (s *AVTransport) GetRunningAlarmProperties() (getRunningAlarmPropertiesResponse, error) {
+	res, err := s.Send("GetRunningAlarmProperties", "", "s:Body")
 	if err != nil {
 		return getRunningAlarmPropertiesResponse{}, err
 	}
@@ -296,8 +296,8 @@ func (zp *AVTransport) GetRunningAlarmProperties() (getRunningAlarmPropertiesRes
 	return data, err
 }
 
-func (zp *AVTransport) GetTransportInfo() (getTransportInfoResponse, error) {
-	res, err := zp.Send("GetTransportInfo", "", "s:Body")
+func (s *AVTransport) GetTransportInfo() (getTransportInfoResponse, error) {
+	res, err := s.Send("GetTransportInfo", "", "s:Body")
 	if err != nil {
 		return getTransportInfoResponse{}, err
 	}
@@ -306,8 +306,8 @@ func (zp *AVTransport) GetTransportInfo() (getTransportInfoResponse, error) {
 	return data, err
 }
 
-func (zp *AVTransport) GetTransportSettings() (getTransportSettingsResponse, error) {
-	res, err := zp.Send("GetTransportSettings", "", "s:Body")
+func (s *AVTransport) GetTransportSettings() (getTransportSettingsResponse, error) {
+	res, err := s.Send("GetTransportSettings", "", "s:Body")
 	if err != nil {
 		return getTransportSettingsResponse{}, err
 	}
@@ -316,58 +316,58 @@ func (zp *AVTransport) GetTransportSettings() (getTransportSettingsResponse, err
 	return data, err
 }
 
-func (zp *AVTransport) Next() error {
-	_, err := zp.Send("Next", "", "")
+func (s *AVTransport) Next() error {
+	_, err := s.Send("Next", "", "")
 	return err
 }
 
-func (zp *AVTransport) NotifyDeletedURI(deletedURI string) error {
-	_, err := zp.Send("NotifyDeletedURI", "<DeletedURI>"+deletedURI+"</DeletedURI>", "")
+func (s *AVTransport) NotifyDeletedURI(deletedURI string) error {
+	_, err := s.Send("NotifyDeletedURI", "<DeletedURI>"+deletedURI+"</DeletedURI>", "")
 	return err
 }
 
-func (zp *AVTransport) Pause() error {
-	_, err := zp.Send("Pause", "", "")
+func (s *AVTransport) Pause() error {
+	_, err := s.Send("Pause", "", "")
 	return err
 }
 
-func (zp *AVTransport) Play() error {
-	_, err := zp.Send("Play", "<Speed>"+strconv.Itoa(zp.Speed)+"</Speed>", "")
+func (s *AVTransport) Play() error {
+	_, err := s.Send("Play", "<Speed>"+strconv.Itoa(s.Speed)+"</Speed>", "")
 	return err
 }
 
-func (zp *AVTransport) Previous() error {
-	_, err := zp.Send("Previous", "", "")
+func (s *AVTransport) Previous() error {
+	_, err := s.Send("Previous", "", "")
 	return err
 }
 
-func (zp *AVTransport) RemoveAllTracksFromQueue() error {
-	_, err := zp.Send("RemoveAllTracksFromQueue", "", "")
+func (s *AVTransport) RemoveAllTracksFromQueue() error {
+	_, err := s.Send("RemoveAllTracksFromQueue", "", "")
 	return err
 }
 
 // `contentType` should be one of `Gonos.ContentTypes.*`
-func (zp *AVTransport) RemoveTrackFromQueue(contentType string, track int) error {
-	_, err := zp.Send("RemoveTrackFromQueue", "<ObjectID>"+contentType+"/"+strconv.Itoa(max(1, track))+"</ObjectID><UpdateID>"+strconv.Itoa(zp.UpdateID)+"</UpdateID>", "")
+func (s *AVTransport) RemoveTrackFromQueue(contentType string, track int) error {
+	_, err := s.Send("RemoveTrackFromQueue", "<ObjectID>"+contentType+"/"+strconv.Itoa(max(1, track))+"</ObjectID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID>", "")
 	return err
 }
 
-func (zp *AVTransport) RemoveTrackRangeFromQueue(start int, count int) (int, error) {
-	res, err := zp.Send("RemoveTrackRangeFromQueue", "<UpdateID>"+strconv.Itoa(zp.UpdateID)+"</UpdateID><StartingIndex>"+strconv.Itoa(start)+"</StartingIndex><NumberOfTracks>"+strconv.Itoa(count)+"</NumberOfTracks>", "NewUpdateID")
+func (s *AVTransport) RemoveTrackRangeFromQueue(start int, count int) (NewUpdateID int, err error) {
+	res, err := s.Send("RemoveTrackRangeFromQueue", "<UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><StartingIndex>"+strconv.Itoa(start)+"</StartingIndex><NumberOfTracks>"+strconv.Itoa(count)+"</NumberOfTracks>", "NewUpdateID")
 	if err != nil {
 		return 0, err
 	}
 	return strconv.Atoi(res)
 }
 
-func (zp *AVTransport) ReorderTracksInQueue(start int, count int, insertBefore int) error {
-	_, err := zp.Send("ReorderTracksInQueue", "<StartingIndex>"+strconv.Itoa(start)+"</StartingIndex><NumberOfTracks>"+strconv.Itoa(count)+"</NumberOfTracks><InsertBefore>"+strconv.Itoa(insertBefore)+"</InsertBefore><UpdateID>"+strconv.Itoa(zp.UpdateID)+"</UpdateID>", "")
+func (s *AVTransport) ReorderTracksInQueue(start int, count int, insertBefore int) error {
+	_, err := s.Send("ReorderTracksInQueue", "<StartingIndex>"+strconv.Itoa(start)+"</StartingIndex><NumberOfTracks>"+strconv.Itoa(count)+"</NumberOfTracks><InsertBefore>"+strconv.Itoa(insertBefore)+"</InsertBefore><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID>", "")
 	return err
 }
 
 // `contentType` should be one of `Gonos.ContentTypes.*`
-func (zp *AVTransport) ReorderTracksInSavedQueue(contentType string, trackList string, newPositionList string) (reorderTracksInSavedQueueResponse, error) {
-	res, err := zp.Send("ReorderTracksInSavedQueue", "<ObjectID>"+contentType+"</ObjectID><UpdateID>"+strconv.Itoa(zp.UpdateID)+"</UpdateID><TrackList>"+trackList+"</TrackList><NewPositionList>"+newPositionList+"</NewPositionList>", "")
+func (s *AVTransport) ReorderTracksInSavedQueue(contentType string, trackList string, newPositionList string) (reorderTracksInSavedQueueResponse, error) {
+	res, err := s.Send("ReorderTracksInSavedQueue", "<ObjectID>"+contentType+"</ObjectID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><TrackList>"+trackList+"</TrackList><NewPositionList>"+newPositionList+"</NewPositionList>", "")
 	if err != nil {
 		return reorderTracksInSavedQueueResponse{}, err
 	}
@@ -377,61 +377,61 @@ func (zp *AVTransport) ReorderTracksInSavedQueue(contentType string, trackList s
 }
 
 // `playMode` should be one of `Gonos.PlayModes.*`
-func (zp *AVTransport) RunAlarm(alarmID int, loggedStartTime string, duration string, programURI string, programMetaData string, playMode string, volume int, includeLinkedZones bool) error {
-	_, err := zp.Send("RunAlarm", "<AlarmID>"+strconv.Itoa(alarmID)+"</AlarmID><LoggedStartTime>"+loggedStartTime+"</LoggedStartTime><Duration>"+duration+"</Duration><ProgramURI>"+programURI+"</ProgramURI><ProgramMetaData>"+programMetaData+"</ProgramMetaData><PlayMode>"+playMode+"</PlayMode><Volume>"+strconv.Itoa(max(0, min(100, volume)))+"</Volume><IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones>", "")
+func (s *AVTransport) RunAlarm(alarmID int, loggedStartTime string, duration string, programURI string, programMetaData string, playMode string, volume int, includeLinkedZones bool) error {
+	_, err := s.Send("RunAlarm", "<AlarmID>"+strconv.Itoa(alarmID)+"</AlarmID><LoggedStartTime>"+loggedStartTime+"</LoggedStartTime><Duration>"+duration+"</Duration><ProgramURI>"+programURI+"</ProgramURI><ProgramMetaData>"+programMetaData+"</ProgramMetaData><PlayMode>"+playMode+"</PlayMode><Volume>"+strconv.Itoa(max(0, min(100, volume)))+"</Volume><IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones>", "")
 	return err
 }
 
 // `contentType` should be one of `Gonos.ContentTypes.*`
 //
 // Returns the objectID of the new que.
-func (zp *AVTransport) SaveQueue(title string) (string, error) {
-	return zp.Send("SaveQueue", "<Title>"+title+"</Title><ObjectID></ObjectID>", "AssignedObjectID")
+func (s *AVTransport) SaveQueue(title string) (AssignedObjectID string, err error) {
+	return s.Send("SaveQueue", "<Title>"+title+"</Title><ObjectID></ObjectID>", "AssignedObjectID")
 }
 
 // Prefer methods `zp.SeekTrack`, `zp.SeekTime` or `zp.SeekTimeDelta`.
 //
 // `unit` should be one of `Gonos.SeekModes.*`.
-func (zp *AVTransport) Seek(unit string, target string) error {
-	_, err := zp.Send("Seek", "<Unit>"+unit+"</Unit><Target>"+target+"</Target>", "")
+func (s *AVTransport) Seek(unit string, target string) error {
+	_, err := s.Send("Seek", "<Unit>"+unit+"</Unit><Target>"+target+"</Target>", "")
 	return err
 }
 
-func (zp *AVTransport) SetAVTransportURI(currentURI string, currentURIMetaData string) error {
-	_, err := zp.Send("SetAVTransportURI", "<CurrentURI>"+currentURI+"</CurrentURI><CurrentURIMetaData>"+currentURIMetaData+"</CurrentURIMetaData>", "")
+func (s *AVTransport) SetAVTransportURI(currentURI string, currentURIMetaData string) error {
+	_, err := s.Send("SetAVTransportURI", "<CurrentURI>"+currentURI+"</CurrentURI><CurrentURIMetaData>"+currentURIMetaData+"</CurrentURIMetaData>", "")
 	return err
 }
 
-func (zp *AVTransport) SetCrossfadeMode(state bool) error {
-	_, err := zp.Send("SetCrossfadeMode", "<CrossfadeMode>"+lib.BoolTo10(state)+"</CrossfadeMode>", "")
+func (s *AVTransport) SetCrossfadeMode(state bool) error {
+	_, err := s.Send("SetCrossfadeMode", "<CrossfadeMode>"+lib.BoolTo10(state)+"</CrossfadeMode>", "")
 	return err
 }
 
-func (zp *AVTransport) SetNextAVTransportURI(nextURI string, nextURIMetaData string) error {
-	_, err := zp.Send("SetNextAVTransportURI", "<NextURI>"+nextURI+"</NextURI><NextURIMetaData>"+nextURIMetaData+"</NextURIMetaData>", "")
+func (s *AVTransport) SetNextAVTransportURI(nextURI string, nextURIMetaData string) error {
+	_, err := s.Send("SetNextAVTransportURI", "<NextURI>"+nextURI+"</NextURI><NextURIMetaData>"+nextURIMetaData+"</NextURIMetaData>", "")
 	return err
 }
 
-func (zp *AVTransport) SetPlayMode(shuffle bool, repeat bool, repeatOne bool) error {
+func (s *AVTransport) SetPlayMode(shuffle bool, repeat bool, repeatOne bool) error {
 	mode, ok := lib.PlayModeMapReversed[[3]bool{shuffle, repeat, repeatOne}]
 	if !ok {
 		return lib.ErrSonos.ErrInvalidPlayMode
 	}
-	_, err := zp.Send("SetPlayMode", "<NewPlayMode>"+mode+"</NewPlayMode>", "")
+	_, err := s.Send("SetPlayMode", "<NewPlayMode>"+mode+"</NewPlayMode>", "")
 	return err
 }
 
-func (zp *AVTransport) SnoozeAlarm(seconds int) error {
-	_, err := zp.Send("SnoozeAlarm", "<Duration>"+time.Time.Add(time.Time{}, time.Second*time.Duration(max(0, seconds))).Format("15:04:05")+"</Duration>", "")
+func (s *AVTransport) SnoozeAlarm(seconds int) error {
+	_, err := s.Send("SnoozeAlarm", "<Duration>"+time.Time.Add(time.Time{}, time.Second*time.Duration(max(0, seconds))).Format("15:04:05")+"</Duration>", "")
 	return err
 }
 
-func (zp *AVTransport) StartAutoplay(programURI string, programMetaData string, volume int, includeLinkedZones bool, resetVolumeAfter bool) error {
-	_, err := zp.Send("StartAutoplay", "<ProgramURI>"+programURI+"</ProgramURI><ProgramMetaData>"+programMetaData+"</ProgramMetaData><Volume>"+strconv.Itoa(volume)+"</Volume><IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones><ResetVolumeAfter>"+lib.BoolTo10(resetVolumeAfter)+"</ResetVolumeAfter>", "")
+func (s *AVTransport) StartAutoplay(programURI string, programMetaData string, volume int, includeLinkedZones bool, resetVolumeAfter bool) error {
+	_, err := s.Send("StartAutoplay", "<ProgramURI>"+programURI+"</ProgramURI><ProgramMetaData>"+programMetaData+"</ProgramMetaData><Volume>"+strconv.Itoa(volume)+"</Volume><IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones><ResetVolumeAfter>"+lib.BoolTo10(resetVolumeAfter)+"</ResetVolumeAfter>", "")
 	return err
 }
 
-func (zp *AVTransport) Stop() error {
-	_, err := zp.Send("Stop", "", "")
+func (s *AVTransport) Stop() error {
+	_, err := s.Send("Stop", "", "")
 	return err
 }

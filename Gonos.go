@@ -30,130 +30,141 @@ type (
 		// Full url address packets will be send to.
 		URL string
 		// GetZoneInfo call is made to confirm if the requested ZonePlayer exists opon creation, might as well store the returned data.
-		ZoneInfo DeviceProperties.GetZoneInfoResponse
+		ZoneInfo Helper.ZoneInfo
 
 		// Contains helper functions.
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.//`.
 		H Helper.Helper
 
 		// Sonos SOAP Service `AlarmClock` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.AlarmClock`.
 		//
 		// Control the sonos alarms and times.
 		AlarmClock AlarmClock.AlarmClock
 
 		// Sonos SOAP Service `AudioIn` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.AudioIn`.
 		//
 		// Control line in.
 		AudioIn AudioIn.AudioIn
 
 		// Sonos SOAP Service `AVTransport`.
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.AVTransport`.
 		//
 		// Service that controls stuff related to transport (play/pause/next/special URLs).
 		AVTransport AVTransport.AVTransport
 
 		// Sonos SOAP Service `ConnectionManager` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.ConnectionManager`.
 		//
 		// Services related to connections and protocols.
 		ConnectionManager ConnectionManager.ConnectionManager
 
 		// Sonos SOAP Service `ContentDirectory`.
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.ContentDirectory`.
 		//
 		// Browse for local content.
 		ContentDirectory ContentDirectory.ContentDirectory
 
 		// Sonos SOAP Service `DeviceProperties`.
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.DeviceProperties`.
 		//
 		// Modify device properties, like LED status and stereo pairs.
 		DeviceProperties DeviceProperties.DeviceProperties
 
 		// Sonos SOAP Service `GroupManagement` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.GroupManagement`.
 		//
 		// Services related to groups.
 		GroupManagement GroupManagement.GroupManagement
 
 		// Sonos SOAP Service `GroupRenderingControl` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.GroupRenderingControl`.
 		//
 		// Volume related controls for groups.
 		GroupRenderingControl GroupRenderingControl.GroupRenderingControl
 
 		// Sonos SOAP Service `HTControl` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.HTControl`.
 		//
 		// Service related to the TV remote control.
 		HTControl HTControl.HTControl
 
 		// Sonos SOAP Service `MusicServices` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.MusicServices`.
 		//
 		// Access to external music services, like Spotify or Youtube Music.
 		MusicServices MusicServices.MusicServices
 
 		// Sonos SOAP Service `QPlay` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.QPlay`.
 		//
 		// Services related to Chinese Tencent Qplay service.
 		QPlay QPlay.QPlay
 
 		// Sonos SOAP Service `Queue` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.Queue`.
 		//
 		// Modify and browse queues.
 		Queue Queue.Queue
 
 		// Sonos SOAP Service `RenderingControl`.
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.RenderingControl`.
 		//
 		// Volume related controls.
 		RenderingControl RenderingControl.RenderingControl
 
 		// Sonos SOAP Service `SystemProperties` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.SystemProperties`.
 		//
 		// Manage system-wide settings, mainly account stuff.
 		SystemProperties SystemProperties.SystemProperties
 
 		// Sonos SOAP Service `VirtualLineIn` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.//`.
 		VirtualLineIn VirtualLineIn.VirtualLineIn
 
 		// Sonos SOAP Service `ZoneGroupTopology` (State: To Implement).
 		//
-		// Prefer functions present in zp.H over the functions in Sonos SOAP Services.
+		// Prefer methods in `zp.H` over methods in `zp.ZoneGroupTopology`.
 		//
 		// Zone config stuff, eg getting all the configured sonos zones.
 		ZoneGroupTopology ZoneGroupTopology.ZoneGroupTopology
 	}
 )
 
+var (
+	ErrSonos                      = lib.ErrSonos
+	ContentTypes                  = lib.ContentTypes
+	SeekModes                     = lib.SeekModes
+	PlayModes                     = lib.PlayModes
+	PlayModeMap                   = lib.PlayModeMap
+	PlayModeMapReversed           = lib.PlayModeMapReversed
+	RecurrenceModes               = lib.RecurrenceModes
+	AlbumArtistDisplayOptionModes = lib.AlbumArtistDisplayOptionModes
+)
+
 // Create new ZonePlayer for controling a Sonos speaker.
 func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
-		return &ZonePlayer{}, lib.ErrSonos.ErrInvalidIPAdress
+		return &ZonePlayer{}, ErrSonos.ErrInvalidIPAdress
 	}
 
 	zp := &ZonePlayer{URL: "http://" + ip.String() + ":1400"}
@@ -193,9 +204,9 @@ func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 		&zp.ZoneGroupTopology,
 	)
 
-	info, err := zp.DeviceProperties.GetZoneInfo()
+	info, err := zp.H.GetZoneInfo()
 	if err != nil {
-		return &ZonePlayer{}, lib.ErrSonos.ErrNoZonePlayerFound
+		return &ZonePlayer{}, ErrSonos.ErrNoZonePlayerFound
 	}
 	zp.ZoneInfo = info
 	return zp, nil
@@ -203,9 +214,9 @@ func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 
 // TODO: Test
 //
-// Create new ZonePlayer using discovery controling a Sonos speaker.
+// Create new ZonePlayer using discovery for controling a Sonos speaker.
 //
-// `timout` of 1 second is recomended.
+// `timeout` of 1 second is recomended.
 func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 	conn, err := net.DialUDP("udp", &net.UDPAddr{Port: 1900}, &net.UDPAddr{IP: net.IPv4(239, 255, 255, 250), Port: 1900})
 	if err != nil {
@@ -236,14 +247,14 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 	}
 
 	if len(zps) <= 0 {
-		return zps, lib.ErrSonos.ErrNoZonePlayerFound
+		return zps, ErrSonos.ErrNoZonePlayerFound
 	}
 	return zps, nil
 }
 
-// Create new ZonePlayer using network scanning controling a Sonos speaker.
+// Create new ZonePlayer using network scanning for controling a Sonos speaker.
 //
-// `timout` of 1 second is recomended.
+// `timeout` of 1 second is recomended.
 func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 	incIP := func(ip net.IP) {
 		for j := len(ip) - 1; j >= 0; j-- {
@@ -281,7 +292,7 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 	wg.Wait()
 
 	if len(zps) <= 0 {
-		return zps, lib.ErrSonos.ErrNoZonePlayerFound
+		return zps, ErrSonos.ErrNoZonePlayerFound
 	}
 	return zps, nil
 }

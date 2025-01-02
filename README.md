@@ -26,7 +26,7 @@ This can be done using either the Sonos services (base implementation) or the he
 
 The available Sonos services are:
 
-- `zp.AlarmClock` (Not yet implemented)
+- `zp.AlarmClock`
 - `zp.AudioIn` (Not yet implemented)
 - `zp.AVTransport`
 - `zp.ConnectionManager` (Not yet implemented)
@@ -48,7 +48,7 @@ The available Sonos services are:
 Some examples for controlling a Sonos device using the Sonos services:
 
 ```go
-err := zp.AlarmClock
+err := zp.AlarmClock.GetTimeServer() // Get the current time server.
 err := zp.AudioIn
 err := zp.AVTransport.Play() // Play current track.
 err := zp.ConnectionManager
