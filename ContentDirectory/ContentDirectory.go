@@ -34,7 +34,7 @@ type (
 		UpdateID      int
 	}
 	getAllPrefixLocationsResponse struct {
-		XMLName           xml.Name `xml:"getAllPrefixLocationsResponse"`
+		XMLName           xml.Name `xml:"GetAllPrefixLocationsResponse"`
 		TotalPrefixes     int
 		PrefixAndIndexCSV string
 		UpdateID          int

@@ -32,7 +32,7 @@ The available Sonos services are:
 - `zp.ConnectionManager`
 - `zp.ContentDirectory`
 - `zp.DeviceProperties`
-- `zp.GroupManagement` (Not yet implemented)
+- `zp.GroupManagement`
 - `zp.GroupRenderingControl` (Not yet implemented)
 - `zp.HTControl` (Not yet implemented)
 - `zp.MusicServices` (Not yet implemented)
@@ -54,7 +54,7 @@ err := zp.AVTransport.Play() // Play current track.
 err := zp.ConnectionManager.GetCurrentConnectionIDs() // Get ids of current connections.
 queInfo, err := zp.ContentDirectory.Browse(Gonos.lib.ContentTypes.QueueMain, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "") // Get info of the current main que.
 zoneAttributes, err := zp.DeviceProperties.GetZoneAttributes() // Get attributes of current zone.
-err := zp.GroupManagement
+err := zp.GroupManagement.RemoveMember("id") // Remove a group member.
 err := zp.GroupRenderingControl
 err := zp.HTControl
 err := zp.MusicServices
