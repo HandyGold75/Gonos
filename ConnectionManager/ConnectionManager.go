@@ -8,7 +8,7 @@ type (
 	}
 
 	getCurrentConnectionInfoResponse struct {
-		XMLName               xml.Name `xml:"getCurrentConnectionInfoResponse"`
+		XMLName               xml.Name `xml:"GetCurrentConnectionInfoResponse"`
 		RcsID                 int
 		AVTransportID         int
 		ProtocolInfo          string
@@ -20,7 +20,7 @@ type (
 		Status string
 	}
 	getProtocolInfoResponse struct {
-		XMLName xml.Name `xml:"getProtocolInfoResponse"`
+		XMLName xml.Name `xml:"GetProtocolInfoResponse"`
 		Source  string
 		Sink    string
 	}
@@ -31,8 +31,8 @@ func New(send func(action, body, targetTag string) (string, error)) ConnectionMa
 }
 
 // Prefer method `h.GetCurrentConnectionIDs`.
-func (s *ConnectionManager) GetCurrentConnectionIDs() (ConnectionIDs string, err error) {
-	return s.Send("GetCurrentConnectionIDs", "", "")
+func (s *ConnectionManager) GetCurrentConnectionIDs() (CurrentConnectionIDs string, err error) {
+	return s.Send("GetCurrentConnectionIDs", "", "CurrentConnectionIDs")
 }
 
 // Prefer method `h.GetCurrentConnectionInfo`.
