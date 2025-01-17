@@ -68,7 +68,12 @@ func (s *AlarmClock) GetDailyIndexRefreshTime() (currentDailyIndexRefreshTime st
 
 func (s *AlarmClock) GetFormat() (getFormatResponse, error) {
 	res, err := s.Send("GetFormat", "", "s:Body")
-	if err != nil {return getFormatResponse{}, err};data := getFormatResponse{};err = xml.Unmarshal([]byte(res), &data);return data, err
+	if err != nil {
+		return getFormatResponse{}, err
+	}
+	data := getFormatResponse{}
+	err = xml.Unmarshal([]byte(res), &data)
+	return data, err
 }
 
 func (s *AlarmClock) GetHouseholdTimeAtStamp(timeStamp string) (householdUTCTime string, err error) {
