@@ -326,7 +326,7 @@ func (zp *ZonePlayer) SendGroupManagement(action, body, targetTag string) (strin
 }
 
 func (zp *ZonePlayer) SendGroupRenderingControl(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaRenderer/GroupRenderingControl/Control", "GroupRenderingControl", action, body, targetTag)
+	return lib.SendAndVerify(zp.URL+"/MediaRenderer/GroupRenderingControl/Control", "GroupRenderingControl", action,  "<InstanceID>0</InstanceID>"+body, targetTag)
 }
 
 func (zp *ZonePlayer) SendHTControl(action, body, targetTag string) (string, error) {
