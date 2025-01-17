@@ -48,16 +48,16 @@ The available Sonos services are:
 Some examples for controlling a Sonos device using the Sonos services:
 
 ```go
-err := zp.AlarmClock.GetTimeServer() // Get the current time server.
+timeServer, err := zp.AlarmClock.GetTimeServer() // Get the current time server.
 err := zp.AudioIn.SetLineInLevel(10, 10) // Set left and right line in level to 10.
 err := zp.AVTransport.Play() // Play current track.
-err := zp.ConnectionManager.GetCurrentConnectionIDs() // Get ids of current connections.
+connectionIDs, err := zp.ConnectionManager.GetCurrentConnectionIDs() // Get ids of current connections.
 queInfo, err := zp.ContentDirectory.Browse(Gonos.lib.ContentTypes.QueueMain, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "") // Get info of the current main que.
 zoneAttributes, err := zp.DeviceProperties.GetZoneAttributes() // Get attributes of current zone.
 err := zp.GroupManagement.RemoveMember("id") // Remove a group member.
-err := zp.GroupRenderingControl.GetGroupVolume() // Get the current group volume.
+volume, err := zp.GroupRenderingControl.GetGroupVolume() // Get the current group volume.
 err := zp.HTControl.SetLEDFeedbackState(true) // Set the LED feedback state.
-err := zp.MusicServices
+availableServices, err := zp.MusicServices.ListAvailableServices() // Get available music services.
 err := zp.QPlay
 err := zp.Queue
 err := zp.RenderingControl.SetVolume(10) // Set volume to 10.
