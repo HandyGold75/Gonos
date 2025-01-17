@@ -8,7 +8,7 @@ import (
 )
 
 type (
-	// To implement, couldn't get a example.
+	// TODO: Implement and correct, couldn't get a example.
 	browseResponseMetaDataLibrary struct {
 		Title       string `xml:"title"`
 		Class       string `xml:"class"`
@@ -19,13 +19,13 @@ type (
 		Description string `xml:"description"`
 		ResMD       string `xml:"resMD"`
 	}
-	// To implement, couldn't get a example.
+	// TODO: Implement and correct, couldn't get a example.
 	LibraryInfo struct {
 		Count      int
 		TotalCount int
 		Librarys   []LibraryInfoItem
 	}
-	// To implement, couldn't get a example.
+	// TODO: Implement and correct, couldn't get a example.
 	LibraryInfoItem struct {
 		AlbumArtURI string
 		Title       string
@@ -110,30 +110,37 @@ func (h *Helper) BrowseMusicLibrary(objectID string) (LibraryInfo, error) {
 	return LibraryInfo{Count: info.NumberReturned, TotalCount: info.TotalMatches, Librarys: librarys}, nil
 }
 
+// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Artist)`.
 func (h *Helper) GetLibraryArtist() (LibraryInfo, error) {
 	return h.BrowseMusicLibrary(lib.ContentTypes.Artist)
 }
 
+// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.AlbumArtist)`.
 func (h *Helper) GetLibraryAlbumArtist() (LibraryInfo, error) {
 	return h.BrowseMusicLibrary(lib.ContentTypes.AlbumArtist)
 }
 
+// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Album)`.
 func (h *Helper) GetLibraryAlbum() (LibraryInfo, error) {
 	return h.BrowseMusicLibrary(lib.ContentTypes.Album)
 }
 
+// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Genre)`.
 func (h *Helper) GetLibraryGenre() (LibraryInfo, error) {
 	return h.BrowseMusicLibrary(lib.ContentTypes.Genre)
 }
 
+// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Composer)`.
 func (h *Helper) GetLibraryComposer() (LibraryInfo, error) {
 	return h.BrowseMusicLibrary(lib.ContentTypes.Composer)
 }
 
+// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Share)`.
 func (h *Helper) GetLibraryTracks() (LibraryInfo, error) {
 	return h.BrowseMusicLibrary(lib.ContentTypes.Tracks)
 }
 
+// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Playlists)`.
 func (h *Helper) GetLibraryPlaylists() (LibraryInfo, error) {
 	return h.BrowseMusicLibrary(lib.ContentTypes.Playlists)
 }
@@ -166,23 +173,27 @@ func (h *Helper) BrowsePlaylist(objectID string) (PLaylistInfo, error) {
 	return PLaylistInfo{Count: info.NumberReturned, TotalCount: info.TotalMatches, Playlists: playlists}, nil
 }
 
+// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.Share)`.
 func (h *Helper) GetShare() (PLaylistInfo, error) {
 	return h.BrowsePlaylist(lib.ContentTypes.Share)
 }
 
+// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.SonosPlaylists)`.
 func (h *Helper) GetSonosPlaylists() (PLaylistInfo, error) {
 	return h.BrowsePlaylist(lib.ContentTypes.SonosPlaylists)
 }
 
-// Get Sonos playlists, in case no sonos playlists are present a empty playlist will be returned
+// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.SonosFavorites)`.
 func (h *Helper) GetSonosFavorites() (PLaylistInfo, error) {
 	return h.BrowsePlaylist(lib.ContentTypes.SonosFavorites)
 }
 
+// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.RadioStations)`.
 func (h *Helper) GetRadioStations() (PLaylistInfo, error) {
 	return h.BrowsePlaylist(lib.ContentTypes.RadioStations)
 }
 
+// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.RadioShows)`.
 func (h *Helper) GetRadioShows() (PLaylistInfo, error) {
 	return h.BrowsePlaylist(lib.ContentTypes.RadioShows)
 }
