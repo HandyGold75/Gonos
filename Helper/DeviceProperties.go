@@ -16,6 +16,7 @@ type (
 	}
 )
 
+// Short for `zp.DeviceProperties.GetZoneInfo`.
 func (h *Helper) GetZoneInfo() (ZoneInfo, error) {
 	info, err := h.deviceProperties.GetZoneInfo()
 	return ZoneInfo{
@@ -32,41 +33,49 @@ func (h *Helper) GetZoneInfo() (ZoneInfo, error) {
 	}, err
 }
 
+// Get ZoneAttribute ZoneName
 func (h *Helper) GetZoneName() (string, error) {
 	res, err := h.deviceProperties.GetZoneAttributes()
 	return res.CurrentZoneName, err
 }
 
+// Get ZoneAttribute Icon
 func (h *Helper) GetIcon() (string, error) {
 	res, err := h.deviceProperties.GetZoneAttributes()
 	return res.CurrentIcon, err
 }
 
+// Get ZoneAttribute Configuration
 func (h *Helper) GetConfiguration() (string, error) {
 	res, err := h.deviceProperties.GetZoneAttributes()
 	return res.CurrentConfiguration, err
 }
 
+// Get ZoneAttribute TargetRoomName
 func (h *Helper) GetTargetRoomName() (string, error) {
 	res, err := h.deviceProperties.GetZoneAttributes()
 	return res.CurrentTargetRoomName, err
 }
 
+// Set ZoneAttribute ZoneName
 func (h *Helper) SetZoneName(zoneName string) error {
 	_, err := h.deviceProperties.Send("SetZoneAttributes", "<DesiredZoneName>"+zoneName+"</DesiredZoneName>", "")
 	return err
 }
 
+// Set ZoneAttribute Icon
 func (h *Helper) SetIcon(icon string) error {
 	_, err := h.deviceProperties.Send("SetZoneAttributes", "<DesiredIcon>"+icon+"</DesiredIcon>", "")
 	return err
 }
 
+// Set ZoneAttribute Configuration
 func (h *Helper) SetConfiguration(configuration string) error {
 	_, err := h.deviceProperties.Send("SetZoneAttributes", "<DesiredConfiguration>"+configuration+"</DesiredConfiguration>", "")
 	return err
 }
 
+// Set ZoneAttribute TargetRoomName
 func (h *Helper) SetTargetRoomName(targetRoomName string) error {
 	_, err := h.deviceProperties.Send("SetZoneAttributes", "<DesiredTargetRoomName>"+targetRoomName+"</DesiredTargetRoomName>", "")
 	return err
