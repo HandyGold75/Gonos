@@ -154,21 +154,6 @@ func ExtractTag(data, tag string) (string, error) {
 	return data, ErrSonos.ErrTagNotFound
 }
 
-// func ExtractTags(data string, tags ...string) ([]string, error) {
-// 	ret := []string{}
-// 	for _, tag := range tags {
-// 		d, err := ExtractTag(data, tag)
-// 		if err != nil {
-// 			return ret, err
-// 		}
-// 		ret = append(ret, d)
-// 	}
-// 	if len(tags) != len(ret) {
-// 		return ret, ErrSonos.ErrTagNotFound
-// 	}
-// 	return ret, nil
-// }
-
 func BoolTo10(b bool) string {
 	if b {
 		return "1"
