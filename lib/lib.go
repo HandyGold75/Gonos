@@ -42,6 +42,12 @@ var (
 		Relative: "REL_TIME",
 		Absolute: "TIME_DELTA",
 	}
+	TransportStates = struct{ Stopped, Playing, PausedPlayback, Transitioning string }{
+		Stopped:        "STOPPED",
+		Playing:        "PLAYING",
+		PausedPlayback: "PAUSED_PLAYBACK",
+		Transitioning:  "TRANSITIONING",
+	}
 	PlayModes = struct{ Normal, RepeatAll, RepeatOne, ShuffleNorepeat, Shuffle, ShuffleRepeaOne string }{
 		Normal:          "NORMAL",
 		RepeatAll:       "REPEAT_ALL",
@@ -76,6 +82,10 @@ var (
 		WMP:    "WMP",
 		ITunes: "ITUNES",
 		None:   "NONE",
+	}
+	UpdateTypes = struct{ All, Software string }{
+		All:      "All ",
+		Software: "Software",
 	}
 )
 

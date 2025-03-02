@@ -135,7 +135,7 @@ func (s *ContentDirectory) GetSystemUpdateID() (Id int, err error) {
 	return strconv.Atoi(res)
 }
 
-// `albumArtistDisplayOption` should be one of `s.AlbumArtistDisplayOptionModes.*`.
+// `albumArtistDisplayOption` should be one of `Gonos.AlbumArtistDisplayOptionModes.*`.
 func (s *ContentDirectory) RefreshShareIndex(albumArtistDisplayOption string) error {
 	_, err := s.Send("RefreshShareIndex", "<AlbumArtistDisplayOption>"+albumArtistDisplayOption+"</AlbumArtistDisplayOption>", "")
 	return err
