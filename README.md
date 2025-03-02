@@ -2,14 +2,14 @@
 
 This module aims to implement an easy and simple way to control Sonos devices while keeping advanced control possible.
 
-The documentation from [svrooij](https://github.com/svrooij/sonos-api-docs) can be referenced for the base implementation.
-Many thanks for the documentation as without it this module would not exist.
+The documentation from [svrooij](https://github.com/svrooij/sonos-api-docs) can be referenced for the base implementation.  
+Many thanks for the documentation as without it, this module would not exist.
 
-Next to the base implementation some helper function are present for easier use.
-For all helper functions please refer to the helper files.
+Next to the base implementation some helper function are present for easier use.  
+For all helper functions please refer to the files in the top level directory of this project.
 
-Note that most of this project is untested.
-Some functions might not work as expected.
+Note that most of this project is untested, as such not all functions might not work as expected.  
+Do you're own testing and see if the functionality you need actually works.
 
 ## Usage
 
@@ -21,27 +21,27 @@ zp, err := Gonos.DiscoverZonePlayer() // Discover a Sonos device using SSDP.
 zp, err := Gonos.ScanZonePlayer("127.0.0.0/8") // Scan a network for Sonos devices.
 ```
 
-After a ZonePlayer is successfully created the associated Sonos device can be controlled.
-This can be done using either the Sonos services (base implementation) or the helpers
+After a ZonePlayer is successfully created the associated Sonos device can be controlled.  
+This can be done using either the Sonos services (base implementation) or the helpers.
 
 The available Sonos services are:
 
-- `zp.AlarmClock`
-- `zp.AudioIn`
-- `zp.AVTransport`
-- `zp.ConnectionManager`
-- `zp.ContentDirectory`
-- `zp.DeviceProperties`
-- `zp.GroupManagement`
-- `zp.GroupRenderingControl`
-- `zp.HTControl`
-- `zp.MusicServices`
-- `zp.QPlay`
-- `zp.Queue`
-- `zp.RenderingControl`
-- `zp.SystemProperties`
-- `zp.VirtualLineIn`
-- `zp.ZoneGroupTopology`
+- [zp.AlarmClock](/AlarmClock/AlarmClock.go)
+- [zp.AudioIn](/AudioIn/AudioIn.go)
+- [zp.AVTransport](/AVTransport/AVTransport.go)
+- [zp.ConnectionManager](/ConnectionManager/ConnectionManager.go)
+- [zp.ContentDirectory](/ContentDirectory/ContentDirectory.go)
+- [zp.DeviceProperties](/DeviceProperties/DeviceProperties.go)
+- [zp.GroupManagement](/GroupManagement/GroupManagement.go)
+- [zp.GroupRenderingControl](/GroupRenderingControl/GroupRenderingControl.go)
+- [zp.HTControl](/HTControl/HTControl.go)
+- [zp.MusicServices](/MusicServices/MusicServices.go)
+- [zp.QPlay](/QPlay/QPlay.go)
+- [zp.Queue](/Queue/Queue.go)
+- [zp.RenderingControl](/RenderingControl/RenderingControl.go)
+- [zp.SystemProperties](/SystemProperties/SystemProperties.go)
+- [zp.VirtualLineIn](/VirtualLineIn/VirtualLineIn.go)
+- [zp.ZoneGroupTopology](/ZoneGroupTopology/ZoneGroupTopology.go)
 
 ## Examples
 
@@ -103,8 +103,7 @@ queInfo, err := zp.GetQue() // Get the current que.
 
 This project is structured as follows:
 
-- ZonePlayer (Gonos.go; Entry point and glues everything together)
-  - lib (lib.go; Contains functions and variables that are used throughout the project)
-  - Sonos Services (Ex: AVTransport.go; Implements base as documented in [svrooij](https://github.com/svrooij/sonos-api-docs))
-  - Helper (Helper.go; Glues helper functions together)
-    - Sonos service helpers (Ex: AVTransport.go; Build upon the base implementation for easier use)
+- Gonos ([/Gonos.go](/Gonos.go); Entrypoint and main functions to get started)
+- lib ([/lib/lib.go](/lib/lib.go); Contains functions and variables that are used throughout the project)
+- Sonos Services ([/\*/\*.go](/AVTransport/AVTransport.go); Implements base as documented in [svrooij](https://github.com/svrooij/sonos-api-docs))
+- Sonos Service Helpers (Ex: [/\*.go](/AVTransport.go); Build upon the base implementation for easier use)
