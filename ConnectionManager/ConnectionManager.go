@@ -30,12 +30,12 @@ func New(send func(action, body, targetTag string) (string, error)) ConnectionMa
 	return ConnectionManager{Send: send}
 }
 
-// Prefer method `h.GetCurrentConnectionIDs`.
+// Prefer method `zp.GetCurrentConnectionIDs`.
 func (s *ConnectionManager) GetCurrentConnectionIDs() (CurrentConnectionIDs string, err error) {
 	return s.Send("GetCurrentConnectionIDs", "", "CurrentConnectionIDs")
 }
 
-// Prefer method `h.GetCurrentConnectionInfo`.
+// Prefer method `zp.GetCurrentConnectionInfo`.
 func (s *ConnectionManager) GetCurrentConnectionInfo(connectionID string) (getCurrentConnectionInfoResponse, error) {
 	res, err := s.Send("GetCurrentConnectionInfo", "<ConnectionID>"+connectionID+"</ConnectionID>", "")
 	if err != nil {
@@ -46,7 +46,7 @@ func (s *ConnectionManager) GetCurrentConnectionInfo(connectionID string) (getCu
 	return data, err
 }
 
-// Prefer method `h.GetProtocolInfo`.
+// Prefer method `zp.GetProtocolInfo`.
 func (s *ConnectionManager) GetProtocolInfo() (getProtocolInfoResponse, error) {
 	res, err := s.Send("GetProtocolInfo", "", "")
 	if err != nil {

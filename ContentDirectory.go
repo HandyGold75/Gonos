@@ -1,4 +1,4 @@
-package Helper
+package Gonos
 
 import (
 	"Gonos/lib"
@@ -81,11 +81,11 @@ type (
 	}
 )
 
-// Prefer methods `h.LibraryArtist`, `h.LibraryAlbumArtist`, `h.LibraryAlbum`, `h.LibraryGenre`, `h.LibraryComposer`, `h.LibraryTracks`, `h.LibraryPlaylists`.
+// Prefer methods `zp.LibraryArtist`, `zp.LibraryAlbumArtist`, `zp.LibraryAlbum`, `zp.LibraryGenre`, `zp.LibraryComposer`, `zp.LibraryTracks`, `zp.LibraryPlaylists`.
 //
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
-func (h *Helper) BrowseMusicLibrary(objectID string) (LibraryInfo, error) {
-	info, err := h.contentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
+func (zp *ZonePlayer) BrowseMusicLibrary(objectID string) (LibraryInfo, error) {
+	info, err := zp.ContentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
 	if err != nil {
 		return LibraryInfo{}, err
 	}
@@ -110,46 +110,46 @@ func (h *Helper) BrowseMusicLibrary(objectID string) (LibraryInfo, error) {
 	return LibraryInfo{Count: info.NumberReturned, TotalCount: info.TotalMatches, Librarys: librarys}, nil
 }
 
-// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Artist)`.
-func (h *Helper) GetLibraryArtist() (LibraryInfo, error) {
-	return h.BrowseMusicLibrary(lib.ContentTypes.Artist)
+// Short for `zp.BrowseMusicLibrary(lib.ContentTypes.Artist)`.
+func (zp *ZonePlayer) GetLibraryArtist() (LibraryInfo, error) {
+	return zp.BrowseMusicLibrary(lib.ContentTypes.Artist)
 }
 
-// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.AlbumArtist)`.
-func (h *Helper) GetLibraryAlbumArtist() (LibraryInfo, error) {
-	return h.BrowseMusicLibrary(lib.ContentTypes.AlbumArtist)
+// Short for `zp.BrowseMusicLibrary(lib.ContentTypes.AlbumArtist)`.
+func (zp *ZonePlayer) GetLibraryAlbumArtist() (LibraryInfo, error) {
+	return zp.BrowseMusicLibrary(lib.ContentTypes.AlbumArtist)
 }
 
-// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Album)`.
-func (h *Helper) GetLibraryAlbum() (LibraryInfo, error) {
-	return h.BrowseMusicLibrary(lib.ContentTypes.Album)
+// Short for `zp.BrowseMusicLibrary(lib.ContentTypes.Album)`.
+func (zp *ZonePlayer) GetLibraryAlbum() (LibraryInfo, error) {
+	return zp.BrowseMusicLibrary(lib.ContentTypes.Album)
 }
 
-// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Genre)`.
-func (h *Helper) GetLibraryGenre() (LibraryInfo, error) {
-	return h.BrowseMusicLibrary(lib.ContentTypes.Genre)
+// Short for `zp.BrowseMusicLibrary(lib.ContentTypes.Genre)`.
+func (zp *ZonePlayer) GetLibraryGenre() (LibraryInfo, error) {
+	return zp.BrowseMusicLibrary(lib.ContentTypes.Genre)
 }
 
-// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Composer)`.
-func (h *Helper) GetLibraryComposer() (LibraryInfo, error) {
-	return h.BrowseMusicLibrary(lib.ContentTypes.Composer)
+// Short for `zp.BrowseMusicLibrary(lib.ContentTypes.Composer)`.
+func (zp *ZonePlayer) GetLibraryComposer() (LibraryInfo, error) {
+	return zp.BrowseMusicLibrary(lib.ContentTypes.Composer)
 }
 
-// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Share)`.
-func (h *Helper) GetLibraryTracks() (LibraryInfo, error) {
-	return h.BrowseMusicLibrary(lib.ContentTypes.Tracks)
+// Short for `zp.BrowseMusicLibrary(lib.ContentTypes.Share)`.
+func (zp *ZonePlayer) GetLibraryTracks() (LibraryInfo, error) {
+	return zp.BrowseMusicLibrary(lib.ContentTypes.Tracks)
 }
 
-// Short for `zp.H.BrowseMusicLibrary(lib.ContentTypes.Playlists)`.
-func (h *Helper) GetLibraryPlaylists() (LibraryInfo, error) {
-	return h.BrowseMusicLibrary(lib.ContentTypes.Playlists)
+// Short for `zp.BrowseMusicLibrary(lib.ContentTypes.Playlists)`.
+func (zp *ZonePlayer) GetLibraryPlaylists() (LibraryInfo, error) {
+	return zp.BrowseMusicLibrary(lib.ContentTypes.Playlists)
 }
 
-// Prefer methods `h.GetShare`, `h.GetSonosPlaylists`, `h.GetSonosFavorites`, `h.GetRadioStations` or `h.GetRadioShows`.
+// Prefer methods `zp.GetShare`, `zp.GetSonosPlaylists`, `zp.GetSonosFavorites`, `zp.GetRadioStations` or `zp.GetRadioShows`.
 //
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
-func (h *Helper) BrowsePlaylist(objectID string) (PLaylistInfo, error) {
-	info, err := h.contentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
+func (zp *ZonePlayer) BrowsePlaylist(objectID string) (PLaylistInfo, error) {
+	info, err := zp.ContentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
 	if err != nil {
 		return PLaylistInfo{}, err
 	}
@@ -173,34 +173,34 @@ func (h *Helper) BrowsePlaylist(objectID string) (PLaylistInfo, error) {
 	return PLaylistInfo{Count: info.NumberReturned, TotalCount: info.TotalMatches, Playlists: playlists}, nil
 }
 
-// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.Share)`.
-func (h *Helper) GetShare() (PLaylistInfo, error) {
-	return h.BrowsePlaylist(lib.ContentTypes.Share)
+// Short for `zp.BrowsePlaylist(lib.ContentTypes.Share)`.
+func (zp *ZonePlayer) GetShare() (PLaylistInfo, error) {
+	return zp.BrowsePlaylist(lib.ContentTypes.Share)
 }
 
-// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.SonosPlaylists)`.
-func (h *Helper) GetSonosPlaylists() (PLaylistInfo, error) {
-	return h.BrowsePlaylist(lib.ContentTypes.SonosPlaylists)
+// Short for `zp.BrowsePlaylist(lib.ContentTypes.SonosPlaylists)`.
+func (zp *ZonePlayer) GetSonosPlaylists() (PLaylistInfo, error) {
+	return zp.BrowsePlaylist(lib.ContentTypes.SonosPlaylists)
 }
 
-// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.SonosFavorites)`.
-func (h *Helper) GetSonosFavorites() (PLaylistInfo, error) {
-	return h.BrowsePlaylist(lib.ContentTypes.SonosFavorites)
+// Short for `zp.BrowsePlaylist(lib.ContentTypes.SonosFavorites)`.
+func (zp *ZonePlayer) GetSonosFavorites() (PLaylistInfo, error) {
+	return zp.BrowsePlaylist(lib.ContentTypes.SonosFavorites)
 }
 
-// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.RadioStations)`.
-func (h *Helper) GetRadioStations() (PLaylistInfo, error) {
-	return h.BrowsePlaylist(lib.ContentTypes.RadioStations)
+// Short for `zp.BrowsePlaylist(lib.ContentTypes.RadioStations)`.
+func (zp *ZonePlayer) GetRadioStations() (PLaylistInfo, error) {
+	return zp.BrowsePlaylist(lib.ContentTypes.RadioStations)
 }
 
-// Short for `zp.H.BrowsePlaylist(lib.ContentTypes.RadioShows)`.
-func (h *Helper) GetRadioShows() (PLaylistInfo, error) {
-	return h.BrowsePlaylist(lib.ContentTypes.RadioShows)
+// Short for `zp.BrowsePlaylist(lib.ContentTypes.RadioShows)`.
+func (zp *ZonePlayer) GetRadioShows() (PLaylistInfo, error) {
+	return zp.BrowsePlaylist(lib.ContentTypes.RadioShows)
 }
 
-// Prefer methods `h.GetQue` or `h.GetQueSecond`.
-func (h *Helper) BrowseQue(objectID string) (QueInfo, error) {
-	info, err := h.contentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
+// Prefer methods `zp.GetQue` or `zp.GetQueSecond`.
+func (zp *ZonePlayer) BrowseQue(objectID string) (QueInfo, error) {
+	info, err := zp.ContentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
 	if err != nil {
 		return QueInfo{}, err
 	}
@@ -228,13 +228,13 @@ func (h *Helper) BrowseQue(objectID string) (QueInfo, error) {
 // Get que, in case no que is active a empty que will be returned.
 //
 // Will return incorrect data if a third party application is controling playback.
-func (h *Helper) GetQue() (QueInfo, error) {
-	return h.BrowseQue(lib.ContentTypes.QueueMain)
+func (zp *ZonePlayer) GetQue() (QueInfo, error) {
+	return zp.BrowseQue(lib.ContentTypes.QueueMain)
 }
 
 // Get secondairy que, in case no que is active a empty que will be returned.
 //
 // Will return incorrect data if a third party application is controling playback.
-func (h *Helper) GetQueSecond() (QueInfo, error) {
-	return h.BrowseQue(lib.ContentTypes.QueueSecond)
+func (zp *ZonePlayer) GetQueSecond() (QueInfo, error) {
+	return zp.BrowseQue(lib.ContentTypes.QueueSecond)
 }

@@ -36,7 +36,7 @@ func (s *AudioIn) GetAudioInputAttributes() (getAudioInputAttributesResponse, er
 	return data, err
 }
 
-// Prefer methods `h.GetLineInLevel`, `h.GetLineInLevelLeft`, `h.GetLineInLevelRight`.
+// Prefer methods `zp.GetLineInLevel`, `zp.GetLineInLevelLeft`, `zp.GetLineInLevelRight`.
 func (s *AudioIn) GetLineInLevel() (getLineInLevelResponse, error) {
 	res, err := s.Send("GetLineInLevel", "", "")
 	if err != nil {
@@ -58,7 +58,7 @@ func (s *AudioIn) SetAudioInputAttributes(desiredName, desiredIcon string) error
 	return err
 }
 
-// Prefer methods `h.SetLineInLevel`, `h.SetLineInLevelLeft`, `h.SetLineInLevelRight`.
+// Prefer methods `zp.SetLineInLevel`, `zp.SetLineInLevelLeft`, `zp.SetLineInLevelRight`.
 func (s *AudioIn) SetLineInLevel(desiredLeftLineInLevel, desiredRightLineInLevel int) error {
 	_, err := s.Send("SetLineInLevel", "<DesiredLeftLineInLevel>"+strconv.Itoa(max(0, min(100, desiredLeftLineInLevel)))+"</DesiredLeftLineInLevel><DesiredRightLineInLevel>"+strconv.Itoa(max(0, min(100, desiredRightLineInLevel)))+"</DesiredRightLineInLevel>", "")
 	return err

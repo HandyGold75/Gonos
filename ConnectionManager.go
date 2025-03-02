@@ -1,4 +1,4 @@
-package Helper
+package Gonos
 
 type (
 	ConnectionInfo struct {
@@ -15,13 +15,13 @@ type (
 )
 
 // Short for `zp.ConnectionManager.GetCurrentConnectionIDs`.
-func (h *Helper) GetCurrentConnectionIDs() (string, error) {
-	return h.connectionManager.GetCurrentConnectionIDs()
+func (zp *ZonePlayer) GetCurrentConnectionIDs() (string, error) {
+	return zp.ConnectionManager.GetCurrentConnectionIDs()
 }
 
 // Short for `zp.ConnectionManager.GetCurrentConnectionInfo`.
-func (h *Helper) GetCurrentConnectionInfo(connectionID string) (ConnectionInfo, error) {
-	info, err := h.connectionManager.GetCurrentConnectionInfo(connectionID)
+func (zp *ZonePlayer) GetCurrentConnectionInfo(connectionID string) (ConnectionInfo, error) {
+	info, err := zp.ConnectionManager.GetCurrentConnectionInfo(connectionID)
 	if err != nil {
 		return ConnectionInfo{}, err
 	}
@@ -37,8 +37,8 @@ func (h *Helper) GetCurrentConnectionInfo(connectionID string) (ConnectionInfo, 
 }
 
 // Short for `zp.ConnectionManager.GetProtocolInfo`.
-func (h *Helper) GetProtocolInfo() (string, string, error) {
-	res, err := h.connectionManager.GetProtocolInfo()
+func (zp *ZonePlayer) GetProtocolInfo() (string, string, error) {
+	res, err := zp.ConnectionManager.GetProtocolInfo()
 	if err != nil {
 		return "", "", nil
 	}

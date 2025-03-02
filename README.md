@@ -69,32 +69,32 @@ zoneGroupAttributes, err := zp.ZoneGroupTopology.GetZoneGroupAttributes() // Get
 Some examples for controlling a Sonos device using the helpers:
 
 ```go
-err := zp.H.Play() // Play current track.
-isPlaying, err := zp.H.GetPlay() // Check if current track is playing.
+err := zp.Play() // Play current track.
+isPlaying, err := zp.GetPlay() // Check if current track is playing.
 
-err := zp.H.Pause() // Pause current track.
-isPaues, err := zp.H.GetPause() // Check if current track is paused.
+err := zp.Pause() // Pause current track.
+isPaues, err := zp.GetPause() // Check if current track is paused.
 
-err := zp.H.Stop() // Stop current track.
-isPaues, err := zp.H.GetStop() // Check if current track is stopped.
+err := zp.Stop() // Stop current track.
+isPaues, err := zp.GetStop() // Check if current track is stopped.
 
-isTransitioning, err := zp.H.GetTransitioning() // Check if current track is transitioning.
+isTransitioning, err := zp.GetTransitioning() // Check if current track is transitioning.
 
-err := zp.H.Next() // Go to next track.
-err := zp.H.Previous() // Go to previous track.
+err := zp.Next() // Go to next track.
+err := zp.Previous() // Go to previous track.
 
-err := zp.H.SetShuffle(true) // Enable shuffle.
-isShuffle, err := zp.H.GetSuffle() // Check if shuffle is enabled.
+err := zp.SetShuffle(true) // Enable shuffle.
+isShuffle, err := zp.GetSuffle() // Check if shuffle is enabled.
 
-err := zp.H.SetRepeat(true) // Enable repeat (Disables reapeat one).
-isRepeat, err := zp.H.GetRepeat() // Check if repeat is enabled.
+err := zp.SetRepeat(true) // Enable repeat (Disables reapeat one).
+isRepeat, err := zp.GetRepeat() // Check if repeat is enabled.
 
-err := zp.H.SetRepeatOne(true) // Enable reapeat one (Disables repeat).
-isRepeatOne, err := zp.H.GetRepeatOne() // Check if repeat one is enabled.
+err := zp.SetRepeatOne(true) // Enable reapeat one (Disables repeat).
+isRepeatOne, err := zp.GetRepeatOne() // Check if repeat one is enabled.
 
-err := zp.H.SeekTrack(10) // Go to 10th track in the que (Count start at 1).
-err := zp.H.SeekTime(69) // Go to the 69th second in the track.
-err := zp.H.SeekTimeDelta(-15) // Go back 15 seconds in the track.
+err := zp.SeekTrack(10) // Go to 10th track in the que (Count start at 1).
+err := zp.SeekTime(69) // Go to the 69th second in the track.
+err := zp.SeekTimeDelta(-15) // Go back 15 seconds in the track.
 
 queInfo, err := zp.GetQue() // Get the current que.
 ```
