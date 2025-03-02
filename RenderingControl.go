@@ -1,8 +1,9 @@
 package Gonos
 
 import (
-	"Gonos/lib"
 	"strconv"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 func (zp *ZonePlayer) GetEQDialogLevel() (bool, error) {

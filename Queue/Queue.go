@@ -1,9 +1,10 @@
 package Queue
 
 import (
-	"Gonos/lib"
 	"encoding/xml"
 	"strconv"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 type (

@@ -3,9 +3,10 @@ package RenderingControl
 // https://sonos.svrooij.io/services/device-properties
 
 import (
-	"Gonos/lib"
 	"encoding/xml"
 	"strconv"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 type (
