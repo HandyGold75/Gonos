@@ -187,14 +187,14 @@ func (zp *ZonePlayer) SeekTime(seconds int) error {
 	return zp.AVTransport.Seek(lib.SeekModes.Relative, time.Time.Add(time.Time{}, time.Second*time.Duration(max(0, seconds))).Format("15:04:05"))
 }
 
-// Go to track time (Relative).
+// Go to track time (Delta).
 func (zp *ZonePlayer) SeekTimeDelta(seconds int) error {
 	prefix := "+"
 	if seconds < 0 {
 		seconds = -seconds
 		prefix = "-"
 	}
-	return zp.AVTransport.Seek(lib.SeekModes.Absolute, prefix+time.Time.Add(time.Time{}, time.Second*time.Duration(seconds)).Format("15:04:05"))
+	return zp.AVTransport.Seek(lib.SeekModes.Delta, prefix+time.Time.Add(time.Time{}, time.Second*time.Duration(seconds)).Format("15:04:05"))
 }
 
 // Short for `zp.AVTransport.RemoveTrackFromQueue`.
@@ -202,12 +202,13 @@ func (zp *ZonePlayer) QueRemove(track int) error {
 	return zp.AVTransport.RemoveTrackFromQueue(lib.ContentTypes.QueueMain, track)
 }
 
-// Short for `zp.AVTransport.RemoveTrackFromQueue`.
-func (zp *ZonePlayer) QueSecondRemove(track int) error {
-	return zp.AVTransport.RemoveTrackFromQueue(lib.ContentTypes.QueueMain, track)
-}
-
 // Short for `zp.AVTransport.RemoveAllTracksFromQueue`.
 func (zp *ZonePlayer) QueClear() error {
 	return zp.AVTransport.RemoveAllTracksFromQueue()
+}
+
+// Short for `zp.AVTransport.AddURIToQueue`.
+func (zp *ZonePlayer) QueAdd(uri string, index int, next bool) error {
+	_, err := zp.AVTransport.AddURIToQueue(uri, "", index, next)
+	return err
 }
