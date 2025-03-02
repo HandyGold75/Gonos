@@ -33,14 +33,14 @@ The available Sonos services are:
 - `zp.ContentDirectory`
 - `zp.DeviceProperties`
 - `zp.GroupManagement`
-- `zp.GroupRenderingControl` (Not yet implemented)
-- `zp.HTControl` (Not yet implemented)
-- `zp.MusicServices` (Not yet implemented)
-- `zp.QPlay` (Not yet implemented)
-- `zp.Queue` (Not yet implemented)
+- `zp.GroupRenderingControl`
+- `zp.HTControl`
+- `zp.MusicServices`
+- `zp.QPlay`
+- `zp.Queue`
 - `zp.RenderingControl`
-- `zp.SystemProperties` (Not yet implemented)
-- `zp.VirtualLineIn` (Not yet implemented)
+- `zp.SystemProperties`
+- `zp.VirtualLineIn`
 - `zp.ZoneGroupTopology` (Not yet implemented)
 
 ## Examples
@@ -61,8 +61,8 @@ availableServices, err := zp.MusicServices.ListAvailableServices() // Get availa
 qPlayAuth, err := zp.QPlay.QPlayAuth("seed") // Does something, probably, idk.
 err := zp.Queue.RemoveTrackRange(10, 6) // Starting at track 10 remove 6 tracks from que.
 err := zp.RenderingControl.SetVolume(10) // Set volume to 10.
-err := zp.SystemProperties
-err := zp.VirtualLineIn
+err := zp.SystemProperties.EnableRDM(1) // Enable RDM.
+err := zp.VirtualLineIn.Play() // Play virtual line in.
 err := zp.ZoneGroupTopology
 ```
 
