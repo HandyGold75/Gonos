@@ -354,7 +354,7 @@ func (zp *ZonePlayer) SendSystemProperties(action, body, targetTag string) (stri
 }
 
 func (zp *ZonePlayer) SendVirtualLineIn(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaRenderer/VirtualLineIn/Control", "VirtualLineIn", action, body, targetTag)
+	return lib.SendAndVerify(zp.URL+"/MediaRenderer/VirtualLineIn/Control", "VirtualLineIn", action, "<InstanceID>0</InstanceID>"+body, targetTag)
 }
 
 func (zp *ZonePlayer) SendZoneGroupTopology(action, body, targetTag string) (string, error) {
