@@ -33,7 +33,7 @@ func (s *SystemProperties) AddAccountX(accountType int, accountID string, accoun
 }
 
 func (s *SystemProperties) AddOAuthAccountX(accountType int, accountToken string, accountKey string, oAuthDeviceID string, authorizationCode string, redirectURI string, userIdHashCode string, accountTier int) (addOAuthAccountXResponse, error) {
-	res, err := s.Send("AddOAuthAccountX", "<AccountType>"+strconv.Itoa(accountType)+"</AccountType><AccountToken>"+accountToken+"</AccountToken><AccountKey>"+accountKey+"</AccountKey><OAuthDeviceID>"+oAuthDeviceID+"</OAuthDeviceID><AuthorizationCode>"+authorizationCode+"</AuthorizationCode><RedirectURI>"+redirectURI+"</RedirectURI><UserIdHashCode>"+userIdHashCode+"</UserIdHashCode><AccountTier>"+strconv.Itoa(accountTier)+"</AccountTier>", "")
+	res, err := s.Send("AddOAuthAccountX", "<AccountType>"+strconv.Itoa(accountType)+"</AccountType><AccountToken>"+accountToken+"</AccountToken><AccountKey>"+accountKey+"</AccountKey><OAuthDeviceID>"+oAuthDeviceID+"</OAuthDeviceID><AuthorizationCode>"+authorizationCode+"</AuthorizationCode><RedirectURI>"+redirectURI+"</RedirectURI><UserIdHashCode>"+userIdHashCode+"</UserIdHashCode><AccountTier>"+strconv.Itoa(accountTier)+"</AccountTier>", "s:Body")
 	if err != nil {
 		return addOAuthAccountXResponse{}, err
 	}
@@ -42,20 +42,24 @@ func (s *SystemProperties) AddOAuthAccountX(accountType int, accountToken string
 	return data, err
 }
 
-func (s *SystemProperties) DoPostUpdateTasks() (string, error) {
-	return s.Send("DoPostUpdateTasks", "", "")
+func (s *SystemProperties) DoPostUpdateTasks() error {
+	_, err := s.Send("DoPostUpdateTasks", "", "")
+	return err
 }
 
-func (s *SystemProperties) EditAccountMd(accountType int, accountID string, newAccountMd string) (string, error) {
-	return s.Send("EditAccountMd", "<AccountType>"+strconv.Itoa(accountType)+"</AccountType><AccountID>"+accountID+"</AccountID><NewAccountMd>"+newAccountMd+"</NewAccountMd>", "")
+func (s *SystemProperties) EditAccountMd(accountType int, accountID string, newAccountMd string) error {
+	_, err := s.Send("EditAccountMd", "<AccountType>"+strconv.Itoa(accountType)+"</AccountType><AccountID>"+accountID+"</AccountID><NewAccountMd>"+newAccountMd+"</NewAccountMd>", "")
+	return err
 }
 
-func (s *SystemProperties) EditAccountPasswordX(accountType int, accountID string, newAccountPassword string) (string, error) {
-	return s.Send("EditAccountPasswordX", "<AccountType>"+strconv.Itoa(accountType)+"</AccountType><AccountID>"+accountID+"</AccountID><NewAccountPassword>"+newAccountPassword+"</NewAccountPassword>", "")
+func (s *SystemProperties) EditAccountPasswordX(accountType int, accountID string, newAccountPassword string) error {
+	_, err := s.Send("EditAccountPasswordX", "<AccountType>"+strconv.Itoa(accountType)+"</AccountType><AccountID>"+accountID+"</AccountID><NewAccountPassword>"+newAccountPassword+"</NewAccountPassword>", "")
+	return err
 }
 
-func (s *SystemProperties) EnableRDM(state bool) (string, error) {
-	return s.Send("EnableRDM", "<RDMValue>"+lib.BoolTo10(state)+"</RDMValue>", "")
+func (s *SystemProperties) EnableRDM(state bool) error {
+	_, err := s.Send("EnableRDM", "<RDMValue>"+lib.BoolTo10(state)+"</RDMValue>", "")
+	return err
 }
 
 func (s *SystemProperties) GetRDM() (bool, error) {
@@ -72,7 +76,7 @@ func (s *SystemProperties) GetWebCode(accountType string) (string, error) {
 }
 
 func (s *SystemProperties) ProvisionCredentialedTrialAccountX(accountType int, accountID string, accountPassword string) (provisionCredentialedTrialAccountXResponse, error) {
-	res, err := s.Send("ProvisionCredentialedTrialAccountX", "<AccountType>"+strconv.Itoa(accountType)+"</AccountType><AccountID>"+accountID+"</AccountID><AccountPassword>"+accountPassword+"</AccountPassword>", "")
+	res, err := s.Send("ProvisionCredentialedTrialAccountX", "<AccountType>"+strconv.Itoa(accountType)+"</AccountType><AccountID>"+accountID+"</AccountID><AccountPassword>"+accountPassword+"</AccountPassword>", "s:Body")
 	if err != nil {
 		return provisionCredentialedTrialAccountXResponse{}, err
 	}

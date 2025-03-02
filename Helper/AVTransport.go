@@ -39,7 +39,7 @@ func (h *Helper) GetTrackInfo() (TrackInfo, error) {
 	}, nil
 }
 
-// Get current transport state, this can be one of `STOPPED`, `PLAYING`, `PAUSED_PLAYBACK`, `TRANSITIONING`.
+// Return may be one of `Gonos.TransportStates.*`.
 func (h *Helper) GetCurrentTransportState() (string, error) {
 	res, err := h.aVTransport.GetTransportInfo()
 	return res.CurrentTransportState, err
@@ -50,10 +50,10 @@ func (h *Helper) Stop() error {
 	return h.aVTransport.Stop()
 }
 
-// Short for `h.GetCurrentTransportState() == "STOPPED"`.
+// Short for `h.GetCurrentTransportState() == Gonos.TransportStates.Stopped`.
 func (h *Helper) GetStop() (bool, error) {
 	state, err := h.GetCurrentTransportState()
-	return state == "STOPPED", err
+	return state == lib.TransportStates.Stopped, err
 }
 
 // Short for `zp.AVTransport.Play`
@@ -61,10 +61,10 @@ func (h *Helper) Play() error {
 	return h.aVTransport.Play()
 }
 
-// Short for `h.GetCurrentTransportState() == "PLAYING"`.
+// Short for `h.GetCurrentTransportState() == Gonos.TransportStates.Playing`.
 func (h *Helper) GetPlay() (bool, error) {
 	state, err := h.GetCurrentTransportState()
-	return state == "PLAYING", err
+	return state == lib.TransportStates.Playing, err
 }
 
 // Short for `zp.AVTransport.Pause`
@@ -72,16 +72,16 @@ func (h *Helper) Pause() error {
 	return h.aVTransport.Pause()
 }
 
-// Short for `h.GetCurrentTransportState() == "PAUSED_PLAYBACK"`.
+// Short for `h.GetCurrentTransportState() == Gonos.TransportStates.PausedPlayback`.
 func (h *Helper) GetPause() (bool, error) {
 	state, err := h.GetCurrentTransportState()
-	return state == "PAUSED_PLAYBACK", err
+	return state == lib.TransportStates.PausedPlayback, err
 }
 
-// Short for `h.GetCurrentTransportState() == "TRANSITIONING"`.
+// Short for `h.GetCurrentTransportState() == Gonos.TransportStates.Transitioning`.
 func (h *Helper) GetTransitioning() (bool, error) {
 	state, err := h.GetCurrentTransportState()
-	return state == "TRANSITIONING", err
+	return state == lib.TransportStates.Transitioning, err
 }
 
 // Short for `zp.AVTransport.Next`.
