@@ -1,10 +1,11 @@
 package AlarmClock
 
 import (
-	"Gonos/lib"
 	"encoding/xml"
 	"strconv"
 	"time"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 type (

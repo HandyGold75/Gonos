@@ -3,10 +3,11 @@ package AVTransport
 // https://sonos.svrooij.io/services/device-properties
 
 import (
-	"Gonos/lib"
 	"encoding/xml"
 	"strconv"
 	"time"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 type (

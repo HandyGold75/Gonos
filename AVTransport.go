@@ -1,9 +1,10 @@
 package Gonos
 
 import (
-	"Gonos/lib"
 	"strconv"
 	"time"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 type (

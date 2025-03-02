@@ -1,11 +1,12 @@
 package ContentDirectory
 
 import (
-	"Gonos/lib"
 	"encoding/xml"
 	"fmt"
 	"strconv"
 	"time"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 type (

@@ -1,10 +1,11 @@
 package Gonos
 
 import (
-	"Gonos/lib"
 	"fmt"
 	"io"
 	"strings"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 type (
