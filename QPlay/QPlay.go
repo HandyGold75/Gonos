@@ -8,7 +8,7 @@ type (
 	}
 
 	qPlayAuthResponse struct {
-		XMLName xml.Name `xml:"QPlayAuthResponse "`
+		XMLName xml.Name `xml:"QPlayAuthResponse"`
 		Code    string
 		MID     string
 		DID     string
