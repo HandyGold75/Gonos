@@ -34,6 +34,7 @@ func (s *ZoneGroupTopology) CheckForUpdate(updateType string, cachedOnly bool, v
 	return s.Send("CheckForUpdate", "<UpdateType>"+updateType+"</UpdateType><CachedOnly>"+lib.BoolTo10(cachedOnly)+"</CachedOnly><Version>"+version+"</Version>", "UpdateItem")
 }
 
+// Prefer methods `zp.GetZoneGroupName`, `zp.GetZoneGroupID`, `zp.GetZonePlayerUUIDsInGroup`, `zp.GetMuseHouseholdId`.
 func (s *ZoneGroupTopology) GetZoneGroupAttributes() (getZoneGroupAttributesResponse, error) {
 	res, err := s.Send("GetZoneGroupAttributes", "", "s:Body")
 	if err != nil {

@@ -47,7 +47,7 @@ func New(send func(action, body, targetTag string) (string, error)) AlarmClock {
 	return AlarmClock{Send: send}
 }
 
-// Prefer method `h.CreateAlarm`.
+// Prefer method `zp.CreateAlarm`.
 //
 // `recurrence` should be one of `Gonos.RecurrenceModes.*`
 //
@@ -56,7 +56,7 @@ func (s *AlarmClock) CreateAlarm(startLocalTime time.Time, seconds int, recurren
 	return s.Send("CreateAlarm", "<StartLocalTime>"+startLocalTime.Format("15:04:05")+"</StartLocalTime><Duration>"+time.Time.Add(time.Time{}, time.Second*time.Duration(max(0, seconds))).Format("15:04:05")+"</Duration><Recurrence>"+recurrence+"</Recurrence><Enabled>"+lib.BoolTo10(enabled)+"</Enabled><RoomUUID>"+roomUUID+"</RoomUUID><ProgramURI>"+programURI+"</ProgramURI><ProgramMetaData>"+programMetaData+"</ProgramMetaData><PlayMode>"+playMode+"</PlayMode><Volume>"+strconv.Itoa(max(0, min(100, volume)))+"</Volume><IncludeLinkedZones>"+lib.BoolTo10(includeLinkedZones)+"</IncludeLinkedZones>", "AssignedID")
 }
 
-// Prefer method `h.DestroyAlarm`.
+// Prefer method `zp.DestroyAlarm`.
 func (s *AlarmClock) DestroyAlarm(id int) error {
 	_, err := s.Send("DestroyAlarm", "<ID>"+strconv.Itoa(id)+"</ID>", "")
 	return err
@@ -154,7 +154,7 @@ func (s *AlarmClock) SetTimeZone(index int, autoAdjustDst bool) error {
 	return err
 }
 
-// Prefer method `h.UpdateAlarm`.
+// Prefer method `zp.UpdateAlarm`.
 //
 // `recurrence` should be one of `Gonos.RecurrenceModes.*`
 //
