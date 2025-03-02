@@ -10,7 +10,6 @@ import (
 	"Gonos/GroupManagement"
 	"Gonos/GroupRenderingControl"
 	"Gonos/HTControl"
-	"Gonos/Helper"
 	"Gonos/MusicServices"
 	"Gonos/QPlay"
 	"Gonos/Queue"
@@ -30,119 +29,114 @@ type (
 		// Full url address packets will be send to.
 		URL string
 		// GetZoneInfo call is made to confirm if the requested ZonePlayer exists opon creation, might as well store the returned data.
-		ZoneInfo Helper.ZoneInfo
-
-		// Contains helper functions.
-		//
-		// Prefer methods in `zp.H` over methods in `zp.//`.
-		H Helper.Helper
+		ZoneInfo ZoneInfo
 
 		// Sonos SOAP Service `AlarmClock` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.AlarmClock`.
+		// Prefer methods in `zp` over methods in `zp.AlarmClock`.
 		//
 		// Control the sonos alarms and times.
 		AlarmClock AlarmClock.AlarmClock
 
 		// Sonos SOAP Service `AudioIn` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.AudioIn`.
+		// Prefer methods in `zp` over methods in `zp.AudioIn`.
 		//
 		// Control line in.
 		AudioIn AudioIn.AudioIn
 
 		// Sonos SOAP Service `AVTransport`.
 		//
-		// Prefer methods in `zp.H` over methods in `zp.AVTransport`.
+		// Prefer methods in `zp` over methods in `zp.AVTransport`.
 		//
 		// Service that controls stuff related to transport (play/pause/next/special URLs).
 		AVTransport AVTransport.AVTransport
 
 		// Sonos SOAP Service `ConnectionManager` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.ConnectionManager`.
+		// Prefer methods in `zp` over methods in `zp.ConnectionManager`.
 		//
 		// Services related to connections and protocols.
 		ConnectionManager ConnectionManager.ConnectionManager
 
 		// Sonos SOAP Service `ContentDirectory`.
 		//
-		// Prefer methods in `zp.H` over methods in `zp.ContentDirectory`.
+		// Prefer methods in `zp` over methods in `zp.ContentDirectory`.
 		//
 		// Browse for local content.
 		ContentDirectory ContentDirectory.ContentDirectory
 
 		// Sonos SOAP Service `DeviceProperties`.
 		//
-		// Prefer methods in `zp.H` over methods in `zp.DeviceProperties`.
+		// Prefer methods in `zp` over methods in `zp.DeviceProperties`.
 		//
 		// Modify device properties, like LED status and stereo pairs.
 		DeviceProperties DeviceProperties.DeviceProperties
 
 		// Sonos SOAP Service `GroupManagement` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.GroupManagement`.
+		// Prefer methods in `zp` over methods in `zp.GroupManagement`.
 		//
 		// Services related to groups.
 		GroupManagement GroupManagement.GroupManagement
 
 		// Sonos SOAP Service `GroupRenderingControl` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.GroupRenderingControl`.
+		// Prefer methods in `zp` over methods in `zp.GroupRenderingControl`.
 		//
 		// Volume related controls for groups.
 		GroupRenderingControl GroupRenderingControl.GroupRenderingControl
 
 		// Sonos SOAP Service `HTControl` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.HTControl`.
+		// Prefer methods in `zp` over methods in `zpTControl`.
 		//
 		// Service related to the TV remote control.
 		HTControl HTControl.HTControl
 
 		// Sonos SOAP Service `MusicServices` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.MusicServices`.
+		// Prefer methods in `zp` over methods in `zp.MusicServices`.
 		//
 		// Access to external music services, like Spotify or Youtube Music.
 		MusicServices MusicServices.MusicServices
 
 		// Sonos SOAP Service `QPlay` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.QPlay`.
+		// Prefer methods in `zp` over methods in `zp.QPlay`.
 		//
 		// Services related to Chinese Tencent Qplay service.
 		QPlay QPlay.QPlay
 
 		// Sonos SOAP Service `Queue` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.Queue`.
+		// Prefer methods in `zp` over methods in `zp.Queue`.
 		//
 		// Modify and browse queues.
 		Queue Queue.Queue
 
 		// Sonos SOAP Service `RenderingControl`.
 		//
-		// Prefer methods in `zp.H` over methods in `zp.RenderingControl`.
+		// Prefer methods in `zp` over methods in `zp.RenderingControl`.
 		//
 		// Volume related controls.
 		RenderingControl RenderingControl.RenderingControl
 
 		// Sonos SOAP Service `SystemProperties` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.SystemProperties`.
+		// Prefer methods in `zp` over methods in `zp.SystemProperties`.
 		//
 		// Manage system-wide settings, mainly account stuff.
 		SystemProperties SystemProperties.SystemProperties
 
 		// Sonos SOAP Service `VirtualLineIn` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.//`.
+		// Prefer methods in `zp` over methods in `zp.//`.
 		VirtualLineIn VirtualLineIn.VirtualLineIn
 
 		// Sonos SOAP Service `ZoneGroupTopology` (State: To Implement).
 		//
-		// Prefer methods in `zp.H` over methods in `zp.ZoneGroupTopology`.
+		// Prefer methods in `zp` over methods in `zp.ZoneGroupTopology`.
 		//
 		// Zone config stuff, eg getting all the configured sonos zones.
 		ZoneGroupTopology ZoneGroupTopology.ZoneGroupTopology
@@ -186,26 +180,7 @@ func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 	zp.VirtualLineIn = VirtualLineIn.New(zp.SendVirtualLineIn)
 	zp.ZoneGroupTopology = ZoneGroupTopology.New(zp.SendZoneGroupTopology)
 
-	zp.H = Helper.New(
-		&zp.AlarmClock,
-		&zp.AudioIn,
-		&zp.AVTransport,
-		&zp.ConnectionManager,
-		&zp.ContentDirectory,
-		&zp.DeviceProperties,
-		&zp.GroupManagement,
-		&zp.GroupRenderingControl,
-		&zp.HTControl,
-		&zp.MusicServices,
-		&zp.QPlay,
-		&zp.Queue,
-		&zp.RenderingControl,
-		&zp.SystemProperties,
-		&zp.VirtualLineIn,
-		&zp.ZoneGroupTopology,
-	)
-
-	info, err := zp.H.GetZoneInfo()
+	info, err := zp.GetZoneInfo()
 	if err != nil {
 		return &ZonePlayer{}, ErrSonos.ErrNoZonePlayerFound
 	}

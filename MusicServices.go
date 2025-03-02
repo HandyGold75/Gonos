@@ -1,4 +1,4 @@
-package Helper
+package Gonos
 
 type AvailableServices struct {
 	DescriptorList string
@@ -7,8 +7,8 @@ type AvailableServices struct {
 }
 
 // Short for `zp.MusicServices.ListAvailableServices'`.
-func (h *Helper) ListAvailableServices() (AvailableServices, error) {
-	res, err := h.musicServices.ListAvailableServices()
+func (zp *ZonePlayer) ListAvailableServices() (AvailableServices, error) {
+	res, err := zp.MusicServices.ListAvailableServices()
 	return AvailableServices{
 		DescriptorList: res.AvailableServiceDescriptorList,
 		TypeList:       res.AvailableServiceTypeList,
@@ -17,6 +17,6 @@ func (h *Helper) ListAvailableServices() (AvailableServices, error) {
 }
 
 // Short for `zp.MusicServices.UpdateAvailableServices'`.
-func (h *Helper) UpdateAvailableServices() error {
-	return h.musicServices.UpdateAvailableServices()
+func (zp *ZonePlayer) UpdateAvailableServices() error {
+	return zp.MusicServices.UpdateAvailableServices()
 }
