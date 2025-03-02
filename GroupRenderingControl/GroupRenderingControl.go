@@ -1,8 +1,9 @@
 package GroupRenderingControl
 
 import (
-	"Gonos/lib"
 	"strconv"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 type (

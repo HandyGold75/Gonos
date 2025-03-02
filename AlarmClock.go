@@ -1,8 +1,9 @@
 package Gonos
 
 import (
-	"Gonos/lib"
 	"time"
+
+	"github.com/HandyGold75/Gonos/lib"
 )
 
 // Set a alarm.

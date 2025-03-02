@@ -1,27 +1,29 @@
 package Gonos
 
 import (
-	"Gonos/AVTransport"
-	"Gonos/AlarmClock"
-	"Gonos/AudioIn"
-	"Gonos/ConnectionManager"
-	"Gonos/ContentDirectory"
-	"Gonos/DeviceProperties"
-	"Gonos/GroupManagement"
-	"Gonos/GroupRenderingControl"
-	"Gonos/HTControl"
-	"Gonos/MusicServices"
-	"Gonos/QPlay"
-	"Gonos/Queue"
-	"Gonos/RenderingControl"
-	"Gonos/SystemProperties"
-	"Gonos/VirtualLineIn"
-	"Gonos/ZoneGroupTopology"
-	"Gonos/lib"
 	"net"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/HandyGold75/Gonos/lib"
+
+	"github.com/HandyGold75/Gonos/AVTransport"
+	"github.com/HandyGold75/Gonos/AlarmClock"
+	"github.com/HandyGold75/Gonos/AudioIn"
+	"github.com/HandyGold75/Gonos/ConnectionManager"
+	"github.com/HandyGold75/Gonos/ContentDirectory"
+	"github.com/HandyGold75/Gonos/DeviceProperties"
+	"github.com/HandyGold75/Gonos/GroupManagement"
+	"github.com/HandyGold75/Gonos/GroupRenderingControl"
+	"github.com/HandyGold75/Gonos/HTControl"
+	"github.com/HandyGold75/Gonos/MusicServices"
+	"github.com/HandyGold75/Gonos/QPlay"
+	"github.com/HandyGold75/Gonos/Queue"
+	"github.com/HandyGold75/Gonos/RenderingControl"
+	"github.com/HandyGold75/Gonos/SystemProperties"
+	"github.com/HandyGold75/Gonos/VirtualLineIn"
+	"github.com/HandyGold75/Gonos/ZoneGroupTopology"
 )
 
 type (
