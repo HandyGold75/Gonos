@@ -1,7 +1,7 @@
 package Helper
 
 // Short for `zp.SystemProperties.EnableRDM`.
-func (h *Helper) EnableRDM(state bool) (string, error) {
+func (h *Helper) EnableRDM(state bool) error {
 	return h.systemProperties.EnableRDM(state)
 }
 
