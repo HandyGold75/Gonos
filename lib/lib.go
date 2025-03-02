@@ -37,10 +37,10 @@ var (
 		QueueMain:      "Q:0",
 		QueueSecond:    "Q:1",
 	}
-	SeekModes = struct{ Track, Absolute, Relative string }{
+	SeekModes = struct{ Track, Relative, Delta string }{
 		Track:    "TRACK_NR",
 		Relative: "REL_TIME",
-		Absolute: "TIME_DELTA",
+		Delta:    "TIME_DELTA",
 	}
 	TransportStates = struct{ Stopped, Playing, PausedPlayback, Transitioning string }{
 		Stopped:        "STOPPED",
