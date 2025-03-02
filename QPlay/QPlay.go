@@ -20,7 +20,7 @@ func New(send func(action, body, targetTag string) (string, error)) QPlay {
 }
 
 func (s *QPlay) QPlayAuth(seed string) (qPlayAuthResponse, error) {
-	res,err s.Send("GetSessionId", "<Seed>"+seed+"</Seed>", "s:Body")
+	res, err := s.Send("GetSessionId", "<Seed>"+seed+"</Seed>", "s:Body")
 	if err != nil {
 		return qPlayAuthResponse{}, err
 	}

@@ -77,7 +77,7 @@ func (s *Queue) AddURI(enqueuedURI string, enqueuedURIMetaData string, desiredFi
 }
 
 func (s *Queue) AttachQueue(queueOwnerID string) (attachQueueResponse, error) {
-	res, err := s.Send("AttachQueue ", "<QueueOwnerID>"+queueOwnerID+"</QueueOwnerID>", "")
+	res, err := s.Send("AttachQueue ", "<QueueOwnerID>"+queueOwnerID+"</QueueOwnerID>", "s:Body")
 	if err != nil {
 		return attachQueueResponse{}, err
 	}
@@ -86,12 +86,13 @@ func (s *Queue) AttachQueue(queueOwnerID string) (attachQueueResponse, error) {
 	return data, err
 }
 
-func (s *Queue) Backup() (string, error) {
-	return s.Send("Backup ", "", "")
+func (s *Queue) Backup() error {
+	_, err := s.Send("Backup ", "", "")
+	return err
 }
 
 func (s *Queue) Browse(startingIndex int, requestedCount int) (browseResponse, error) {
-	res, err := s.Send("Browse ", "<QueueID>"+s.QueueID+"</QueueID><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><RequestedCount>"+strconv.Itoa(requestedCount)+"</RequestedCount>", "")
+	res, err := s.Send("Browse ", "<QueueID>"+s.QueueID+"</QueueID><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><RequestedCount>"+strconv.Itoa(requestedCount)+"</RequestedCount>", "s:Body")
 	if err != nil {
 		return browseResponse{}, err
 	}
@@ -133,7 +134,7 @@ func (s *Queue) ReorderTracks(startingIndex int, numberOfTracks int, insertBefor
 }
 
 func (s *Queue) ReplaceAllTracks(containerURI string, containerMetaData string, currentTrackIndex int, newCurrentTrackIndices string, numberOfURIs int, enqueuedURIsAndMetaData string) (replaceAllTracksResponse, error) {
-	res, err := s.Send("ReplaceAllTracks ", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><ContainerURI>"+containerURI+"</ContainerURI><ContainerMetaData>"+containerMetaData+"</ContainerMetaData><CurrentTrackIndex>"+strconv.Itoa(currentTrackIndex)+"</CurrentTrackIndex><NewCurrentTrackIndices>"+newCurrentTrackIndices+"</NewCurrentTrackIndices><NumberOfURIs>"+strconv.Itoa(numberOfURIs)+"</NumberOfURIs><EnqueuedURIsAndMetaData>"+enqueuedURIsAndMetaData+"</EnqueuedURIsAndMetaData>", "")
+	res, err := s.Send("ReplaceAllTracks ", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><ContainerURI>"+containerURI+"</ContainerURI><ContainerMetaData>"+containerMetaData+"</ContainerMetaData><CurrentTrackIndex>"+strconv.Itoa(currentTrackIndex)+"</CurrentTrackIndex><NewCurrentTrackIndices>"+newCurrentTrackIndices+"</NewCurrentTrackIndices><NumberOfURIs>"+strconv.Itoa(numberOfURIs)+"</NumberOfURIs><EnqueuedURIsAndMetaData>"+enqueuedURIsAndMetaData+"</EnqueuedURIsAndMetaData>", "s:Body")
 	if err != nil {
 		return replaceAllTracksResponse{}, err
 	}
