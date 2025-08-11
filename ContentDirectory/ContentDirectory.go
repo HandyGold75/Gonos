@@ -2,7 +2,6 @@ package ContentDirectory
 
 import (
 	"encoding/xml"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -154,7 +153,6 @@ func (s *ContentDirectory) SetBrowseable(state bool) error {
 
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
 func (s *ContentDirectory) UpdateObject(objectID string, currentTagValue string, newTagValue string) error {
-	out, err := s.Send("UpdateObject", "<ObjectID>"+objectID+"</ObjectID><CurrentTagValue>"+currentTagValue+"</CurrentTagValue><NewTagValue>"+newTagValue+"</NewTagValue>", "")
-	fmt.Println(out)
+	_, err := s.Send("UpdateObject", "<ObjectID>"+objectID+"</ObjectID><CurrentTagValue>"+currentTagValue+"</CurrentTagValue><NewTagValue>"+newTagValue+"</NewTagValue>", "")
 	return err
 }

@@ -1,9 +1,7 @@
 package Gonos
 
 import (
-	"fmt"
 	"io"
-	"strings"
 
 	"github.com/HandyGold75/Gonos/lib"
 )
@@ -91,7 +89,6 @@ func (zp *ZonePlayer) BrowseMusicLibrary(objectID string) (LibraryInfo, error) {
 		return LibraryInfo{}, err
 	}
 	metadata := []browseResponseMetaDataLibrary{}
-	fmt.Println(strings.ReplaceAll(info.Result, "id=", "\r\nid="))
 	err = lib.UnmarshalMetaData(info.Result, &metadata)
 	if err == io.EOF {
 		return LibraryInfo{}, nil
@@ -212,7 +209,6 @@ func (zp *ZonePlayer) BrowseQue(objectID string) (QueInfo, error) {
 	} else if err != nil {
 		return QueInfo{}, err
 	}
-	fmt.Println(len(metadata))
 	tracks := []QueInfoItem{}
 	for _, track := range metadata {
 		tracks = append(tracks, QueInfoItem{
