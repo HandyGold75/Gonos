@@ -33,14 +33,14 @@ type (
 		// GetZoneInfo call is made to confirm if the requested ZonePlayer exists opon creation, might as well store the returned data.
 		ZoneInfo ZoneInfo
 
-		// Sonos SOAP Service `AlarmClock` (State: To Implement).
+		// Sonos SOAP Service `AlarmClock`.
 		//
 		// Prefer methods in `zp` over methods in `zp.AlarmClock`.
 		//
 		// Control the sonos alarms and times.
 		AlarmClock AlarmClock.AlarmClock
 
-		// Sonos SOAP Service `AudioIn` (State: To Implement).
+		// Sonos SOAP Service `AudioIn`.
 		//
 		// Prefer methods in `zp` over methods in `zp.AudioIn`.
 		//
@@ -54,7 +54,7 @@ type (
 		// Service that controls stuff related to transport (play/pause/next/special URLs).
 		AVTransport AVTransport.AVTransport
 
-		// Sonos SOAP Service `ConnectionManager` (State: To Implement).
+		// Sonos SOAP Service `ConnectionManager`.
 		//
 		// Prefer methods in `zp` over methods in `zp.ConnectionManager`.
 		//
@@ -75,42 +75,42 @@ type (
 		// Modify device properties, like LED status and stereo pairs.
 		DeviceProperties DeviceProperties.DeviceProperties
 
-		// Sonos SOAP Service `GroupManagement` (State: To Implement).
+		// Sonos SOAP Service `GroupManagement`.
 		//
 		// Prefer methods in `zp` over methods in `zp.GroupManagement`.
 		//
 		// Services related to groups.
 		GroupManagement GroupManagement.GroupManagement
 
-		// Sonos SOAP Service `GroupRenderingControl` (State: To Implement).
+		// Sonos SOAP Service `GroupRenderingControl`.
 		//
 		// Prefer methods in `zp` over methods in `zp.GroupRenderingControl`.
 		//
 		// Volume related controls for groups.
 		GroupRenderingControl GroupRenderingControl.GroupRenderingControl
 
-		// Sonos SOAP Service `HTControl` (State: To Implement).
+		// Sonos SOAP Service `HTControl`.
 		//
 		// Prefer methods in `zp` over methods in `zpTControl`.
 		//
 		// Service related to the TV remote control.
 		HTControl HTControl.HTControl
 
-		// Sonos SOAP Service `MusicServices` (State: To Implement).
+		// Sonos SOAP Service `MusicServices`.
 		//
 		// Prefer methods in `zp` over methods in `zp.MusicServices`.
 		//
 		// Access to external music services, like Spotify or Youtube Music.
 		MusicServices MusicServices.MusicServices
 
-		// Sonos SOAP Service `QPlay` (State: To Implement).
+		// Sonos SOAP Service `QPlay`.
 		//
 		// Prefer methods in `zp` over methods in `zp.QPlay`.
 		//
 		// Services related to Chinese Tencent Qplay service.
 		QPlay QPlay.QPlay
 
-		// Sonos SOAP Service `Queue` (State: To Implement).
+		// Sonos SOAP Service `Queue`.
 		//
 		// Prefer methods in `zp` over methods in `zp.Queue`.
 		//
@@ -124,19 +124,19 @@ type (
 		// Volume related controls.
 		RenderingControl RenderingControl.RenderingControl
 
-		// Sonos SOAP Service `SystemProperties` (State: To Implement).
+		// Sonos SOAP Service `SystemProperties`.
 		//
 		// Prefer methods in `zp` over methods in `zp.SystemProperties`.
 		//
 		// Manage system-wide settings, mainly account stuff.
 		SystemProperties SystemProperties.SystemProperties
 
-		// Sonos SOAP Service `VirtualLineIn` (State: To Implement).
+		// Sonos SOAP Service `VirtualLineIn`.
 		//
 		// Prefer methods in `zp` over methods in `zp.//`.
 		VirtualLineIn VirtualLineIn.VirtualLineIn
 
-		// Sonos SOAP Service `ZoneGroupTopology` (State: To Implement).
+		// Sonos SOAP Service `ZoneGroupTopology`.
 		//
 		// Prefer methods in `zp` over methods in `zp.ZoneGroupTopology`.
 		//
@@ -190,8 +190,6 @@ func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 	return zp, nil
 }
 
-// TODO: Test
-//
 // Create new ZonePlayer using discovery for controling a Sonos speaker.
 //
 // `timeout` of 1 second is recomended.
