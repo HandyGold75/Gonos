@@ -7,7 +7,6 @@ import (
 )
 
 type (
-	// TODO: Implement and correct, couldn't get a example.
 	browseResponseMetaDataLibrary struct {
 		Title       string `xml:"title"`
 		Class       string `xml:"class"`
@@ -18,13 +17,11 @@ type (
 		Description string `xml:"description"`
 		ResMD       string `xml:"resMD"`
 	}
-	// TODO: Implement and correct, couldn't get a example.
 	LibraryInfo struct {
 		Count      int
 		TotalCount int
 		Librarys   []LibraryInfoItem
 	}
-	// TODO: Implement and correct, couldn't get a example.
 	LibraryInfoItem struct {
 		AlbumArtURI string
 		Title       string
