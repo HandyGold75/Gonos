@@ -3,8 +3,6 @@ package lib
 import (
 	"encoding/xml"
 	"errors"
-	"io"
-	"net/http"
 	"reflect"
 	"strings"
 )
@@ -88,45 +86,6 @@ var (
 		Software: "Software",
 	}
 )
-
-func Send(url string, endpoint string, action string, body string) (string, error) {
-	req, err := http.NewRequest("POST", url, strings.NewReader(`<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:`+action+` xmlns:u="urn:schemas-upnp-org:service:`+endpoint+`:1">`+body+`</u:`+action+`></s:Body></s:Envelope>`))
-	if err != nil {
-		return "", err
-	}
-	req.Header.Add("Content-Type", "text/xml")
-	req.Header.Add("SOAPACTION", "urn:schemas-upnp-org:service:"+endpoint+":1#"+action)
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	res, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-	return string(res[:]), nil
-}
-
-func SendAndVerify(url string, endpoint string, action string, body string, targetTag string) (string, error) {
-	res, err := Send(url, endpoint, action, body)
-	if err != nil {
-		return res, err
-	}
-
-	if targetTag != "" {
-		res, err = ExtractTag(res, targetTag)
-		if err != nil {
-			return res, ErrSonos.ErrUnexpectedResponse
-		}
-		return res, nil
-	}
-	if res != `<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:`+action+`Response xmlns:u="urn:schemas-upnp-org:service:`+endpoint+`:1"></u:`+action+`Response></s:Body></s:Envelope>` {
-		return res, ErrSonos.ErrUnexpectedResponse
-	}
-	return res, nil
-}
 
 func UnmarshalMetaData[T any](data string, v T) error {
 	data = strings.ReplaceAll(data, "&apos;", "'")

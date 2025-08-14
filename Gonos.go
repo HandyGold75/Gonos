@@ -1,7 +1,9 @@
 package Gonos
 
 import (
+	"io"
 	"net"
+	"net/http"
 	"strings"
 	"sync"
 	"time"
@@ -198,16 +200,18 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 	if err != nil {
 		return []*ZonePlayer{}, err
 	}
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
-	for i := 0; i < 3; i++ {
+	for range 3 {
 		_, _ = conn.Write([]byte("M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nMAN: \"ssdp:discover\"\r\nMX: 1\r\nST: urn:schemas-upnp-org:device:ZonePlayer:1\r\n\r\n"))
 	}
 
 	zps := []*ZonePlayer{}
 	for {
 		buf := make([]byte, 1024)
-		conn.SetDeadline(time.Now().Add(timeout))
+		if err := conn.SetDeadline(time.Now().Add(timeout)); err != nil {
+			return zps, err
+		}
 		_, addr, err := conn.ReadFrom(buf)
 		if err.(*net.OpError).Timeout() {
 			break
@@ -256,7 +260,7 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 			if err != nil {
 				return
 			}
-			defer conn.Close()
+			defer func() { _ = conn.Close() }()
 
 			zp, err := NewZonePlayer(ip)
 			if err != nil {
@@ -274,65 +278,97 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 }
 
 func (zp *ZonePlayer) SendAVTransport(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaRenderer/AVTransport/Control", "AVTransport", action, "<InstanceID>0</InstanceID>"+body, targetTag)
+	return SendAndVerify(zp.URL+"/MediaRenderer/AVTransport/Control", "AVTransport", action, "<InstanceID>0</InstanceID>"+body, targetTag)
 }
 
 func (zp *ZonePlayer) SendAlarmClock(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/AlarmClock/Control", "AlarmClock", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/AlarmClock/Control", "AlarmClock", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendAudioIn(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/AudioIn/Control", "AudioIn", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/AudioIn/Control", "AudioIn", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendConnectionManager(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaRenderer/ConnectionManager/Control", "ConnectionManager", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/MediaRenderer/ConnectionManager/Control", "ConnectionManager", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendContentDirectory(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaServer/ContentDirectory/Control", "ContentDirectory", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/MediaServer/ContentDirectory/Control", "ContentDirectory", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendDeviceProperties(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/DeviceProperties/Control", "DeviceProperties", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/DeviceProperties/Control", "DeviceProperties", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendGroupManagement(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/GroupManagement/Control", "GroupManagement", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/GroupManagement/Control", "GroupManagement", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendGroupRenderingControl(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaRenderer/GroupRenderingControl/Control", "GroupRenderingControl", action, "<InstanceID>0</InstanceID>"+body, targetTag)
+	return SendAndVerify(zp.URL+"/MediaRenderer/GroupRenderingControl/Control", "GroupRenderingControl", action, "<InstanceID>0</InstanceID>"+body, targetTag)
 }
 
 func (zp *ZonePlayer) SendHTControl(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/HTControl/Control", "HTControl", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/HTControl/Control", "HTControl", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendMusicServices(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MusicServices/Control", "MusicServices", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/MusicServices/Control", "MusicServices", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendQPlay(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/QPlay/Control", "QPlay", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/QPlay/Control", "QPlay", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendQueue(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaRenderer/Queue/Control", "Queue", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/MediaRenderer/Queue/Control", "Queue", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendRenderingControl(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaRenderer/RenderingControl/Control", "RenderingControl", action, "<InstanceID>0</InstanceID>"+body, targetTag)
+	return SendAndVerify(zp.URL+"/MediaRenderer/RenderingControl/Control", "RenderingControl", action, "<InstanceID>0</InstanceID>"+body, targetTag)
 }
 
 func (zp *ZonePlayer) SendSystemProperties(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/SystemProperties/Control", "SystemProperties", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/SystemProperties/Control", "SystemProperties", action, body, targetTag)
 }
 
 func (zp *ZonePlayer) SendVirtualLineIn(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/MediaRenderer/VirtualLineIn/Control", "VirtualLineIn", action, "<InstanceID>0</InstanceID>"+body, targetTag)
+	return SendAndVerify(zp.URL+"/MediaRenderer/VirtualLineIn/Control", "VirtualLineIn", action, "<InstanceID>0</InstanceID>"+body, targetTag)
 }
 
 func (zp *ZonePlayer) SendZoneGroupTopology(action, body, targetTag string) (string, error) {
-	return lib.SendAndVerify(zp.URL+"/ZoneGroupTopology/Control", "ZoneGroupTopology", action, body, targetTag)
+	return SendAndVerify(zp.URL+"/ZoneGroupTopology/Control", "ZoneGroupTopology", action, body, targetTag)
+}
+
+func SendAndVerify(url string, endpoint string, action string, body string, targetTag string) (string, error) {
+	req, err := http.NewRequest("POST", url, strings.NewReader(`<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:`+action+` xmlns:u="urn:schemas-upnp-org:service:`+endpoint+`:1">`+body+`</u:`+action+`></s:Body></s:Envelope>`))
+	if err != nil {
+		return "", err
+	}
+	req.Header.Add("Content-Type", "text/xml")
+	req.Header.Add("SOAPACTION", "urn:schemas-upnp-org:service:"+endpoint+":1#"+action)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	resb, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	res := string(resb[:])
+
+	if targetTag != "" {
+		res, err = lib.ExtractTag(res, targetTag)
+		if err != nil {
+			return res, ErrSonos.ErrUnexpectedResponse
+		}
+		return res, nil
+	}
+	if res != `<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:`+action+`Response xmlns:u="urn:schemas-upnp-org:service:`+endpoint+`:1"></u:`+action+`Response></s:Body></s:Envelope>` {
+		return res, ErrSonos.ErrUnexpectedResponse
+	}
+	return res, nil
 }
