@@ -196,27 +196,37 @@ func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 //
 // `timeout` of 1 second is recomended.
 func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
-	conn, err := net.DialUDP("udp", &net.UDPAddr{Port: 1900}, &net.UDPAddr{IP: net.IPv4(239, 255, 255, 250), Port: 1900})
+	multicastAddr := net.UDPAddr{IP: net.IPv4(239, 255, 255, 250), Port: 1900}
+	conn, err := net.ListenMulticastUDP("udp4", nil, &multicastAddr)
 	if err != nil {
 		return []*ZonePlayer{}, err
 	}
-	defer func() { _ = conn.Close() }()
+	defer conn.Close()
 
-	for range 3 {
-		_, _ = conn.Write([]byte("M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nMAN: \"ssdp:discover\"\r\nMX: 1\r\nST: urn:schemas-upnp-org:device:ZonePlayer:1\r\n\r\n"))
+	// M-SEARCH Nachricht senden
+	msg := []byte("M-SEARCH * HTTP/1.1\r\n" +
+		"HOST: 239.255.255.250:1900\r\n" +
+		"MAN: \"ssdp:discover\"\r\n" +
+		"MX: 3\r\n" +
+		"ST: urn:schemas-upnp-org:device:ZonePlayer:1\r\n" +
+		"\r\n")
+
+	_, err = conn.WriteTo(msg, &multicastAddr)
+	if err != nil {
+		return []*ZonePlayer{}, err
 	}
 
 	zps := []*ZonePlayer{}
+	conn.SetDeadline(time.Now().Add(timeout))
+	buf := make([]byte, 1024)
 	for {
-		buf := make([]byte, 1024)
-		if err := conn.SetDeadline(time.Now().Add(timeout)); err != nil {
-			return zps, err
-		}
 		_, addr, err := conn.ReadFrom(buf)
-		if err.(*net.OpError).Timeout() {
-			break
-		} else if err != nil {
-			return zps, err
+		if err != nil {
+			if err.(*net.OpError).Timeout() {
+				break
+			} else {
+				return zps, err
+			}
 		}
 
 		zp, err := NewZonePlayer(strings.Split(addr.String(), ":")[0])
