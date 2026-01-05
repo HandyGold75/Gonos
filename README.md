@@ -17,8 +17,8 @@ Creating a ZonePlayer for controlling a Sonos device can be done by any of these
 
 ```go
 zp, err := Gonos.NewZonePlayer("127.0.0.1") // Use the IpAddress of the Sonos device.
-zp, err := Gonos.DiscoverZonePlayer() // Discover a Sonos device using SSDP.
-zp, err := Gonos.ScanZonePlayer("127.0.0.0/8") // Scan a network for Sonos devices.
+zp, err := Gonos.DiscoverZonePlayer(time.Second) // Discover a Sonos device using SSDP.
+zp, err := Gonos.ScanZonePlayer("127.0.0.0/8", time.Second) // Scan a network for Sonos devices.
 ```
 
 After a ZonePlayer is successfully created the associated Sonos device can be controlled.  
@@ -73,10 +73,10 @@ err := zp.Play() // Play current track.
 isPlaying, err := zp.GetPlay() // Check if current track is playing.
 
 err := zp.Pause() // Pause current track.
-isPaues, err := zp.GetPause() // Check if current track is paused.
+isPaused, err := zp.GetPause() // Check if current track is paused.
 
 err := zp.Stop() // Stop current track.
-isPaues, err := zp.GetStop() // Check if current track is stopped.
+isStopped, err := zp.GetStop() // Check if current track is stopped.
 
 isTransitioning, err := zp.GetTransitioning() // Check if current track is transitioning.
 
