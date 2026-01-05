@@ -4,6 +4,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -194,7 +195,7 @@ func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 
 // Create new ZonePlayer using discovery for controling a Sonos speaker.
 //
-// `timeout` of 1 second is recomended.
+// `timeout` of 1-3 second is recomended.
 func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 	multicastAddr := net.UDPAddr{IP: net.IPv4(239, 255, 255, 250), Port: 1900}
 	conn, err := net.ListenMulticastUDP("udp4", nil, &multicastAddr)
@@ -203,11 +204,10 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 	}
 	defer conn.Close()
 
-	// M-SEARCH Nachricht senden
 	msg := []byte("M-SEARCH * HTTP/1.1\r\n" +
 		"HOST: 239.255.255.250:1900\r\n" +
 		"MAN: \"ssdp:discover\"\r\n" +
-		"MX: 3\r\n" +
+		"MX: " + strconv.Itoa(int(timeout.Seconds())) + "\r\n" +
 		"ST: urn:schemas-upnp-org:device:ZonePlayer:1\r\n" +
 		"\r\n")
 
@@ -266,11 +266,11 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 		go func(ip string) {
 			defer wg.Done()
 
-			conn, err := net.DialTimeout("tcp", ip+":"+"1400", time.Second)
+			conn, err := net.DialTimeout("tcp", ip+":"+"1400", timeout)
 			if err != nil {
 				return
 			}
-			defer func() { _ = conn.Close() }()
+			defer conn.Close()
 
 			zp, err := NewZonePlayer(ip)
 			if err != nil {
@@ -362,7 +362,7 @@ func SendAndVerify(url string, endpoint string, action string, body string, targ
 	if err != nil {
 		return "", err
 	}
-	defer func() { _ = resp.Body.Close() }()
+	defer resp.Body.Close()
 
 	resb, err := io.ReadAll(resp.Body)
 	if err != nil {
