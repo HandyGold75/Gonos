@@ -58,7 +58,7 @@ func New(send func(action, body, targetTag string) (string, error)) Queue {
 }
 
 func (s *Queue) AddMultipleURIs(containerURI string, containerMetaData string, desiredFirstTrackNumberEnqueued int, enqueueAsNext bool, numberOfURIs int, enqueuedURIsAndMetaData string) (addMultipleURIsResponse, error) {
-	res, err := s.Send("AddMultipleURIs ", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><ContainerURI>"+containerURI+"</ContainerURI><ContainerMetaData>"+containerMetaData+"</ContainerMetaData><DesiredFirstTrackNumberEnqueued>"+strconv.Itoa(desiredFirstTrackNumberEnqueued)+"</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>"+lib.BoolTo10(enqueueAsNext)+"</EnqueueAsNext><NumberOfURIs>"+strconv.Itoa(numberOfURIs)+"</NumberOfURIs><EnqueuedURIsAndMetaData>"+enqueuedURIsAndMetaData+"</EnqueuedURIsAndMetaData>", "s:Body")
+	res, err := s.Send("AddMultipleURIs", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><ContainerURI>"+containerURI+"</ContainerURI><ContainerMetaData>"+containerMetaData+"</ContainerMetaData><DesiredFirstTrackNumberEnqueued>"+strconv.Itoa(desiredFirstTrackNumberEnqueued)+"</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>"+lib.BoolTo10(enqueueAsNext)+"</EnqueueAsNext><NumberOfURIs>"+strconv.Itoa(numberOfURIs)+"</NumberOfURIs><EnqueuedURIsAndMetaData>"+enqueuedURIsAndMetaData+"</EnqueuedURIsAndMetaData>", "s:Body")
 	if err != nil {
 		return addMultipleURIsResponse{}, err
 	}
@@ -68,7 +68,7 @@ func (s *Queue) AddMultipleURIs(containerURI string, containerMetaData string, d
 }
 
 func (s *Queue) AddURI(enqueuedURI string, enqueuedURIMetaData string, desiredFirstTrackNumberEnqueued int, enqueueAsNext bool) (addURIResponse, error) {
-	res, err := s.Send("AddURI ", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><EnqueuedURI>"+enqueuedURI+"</EnqueuedURI><EnqueuedURIMetaData>"+enqueuedURIMetaData+"</EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>"+strconv.Itoa(desiredFirstTrackNumberEnqueued)+"</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>"+lib.BoolTo10(enqueueAsNext)+"</EnqueueAsNext>", "s:Body")
+	res, err := s.Send("AddURI", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><EnqueuedURI>"+enqueuedURI+"</EnqueuedURI><EnqueuedURIMetaData>"+enqueuedURIMetaData+"</EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>"+strconv.Itoa(desiredFirstTrackNumberEnqueued)+"</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>"+lib.BoolTo10(enqueueAsNext)+"</EnqueueAsNext>", "s:Body")
 	if err != nil {
 		return addURIResponse{}, err
 	}
@@ -78,7 +78,7 @@ func (s *Queue) AddURI(enqueuedURI string, enqueuedURIMetaData string, desiredFi
 }
 
 func (s *Queue) AttachQueue(queueOwnerID string) (attachQueueResponse, error) {
-	res, err := s.Send("AttachQueue ", "<QueueOwnerID>"+queueOwnerID+"</QueueOwnerID>", "s:Body")
+	res, err := s.Send("AttachQueue", "<QueueOwnerID>"+queueOwnerID+"</QueueOwnerID>", "s:Body")
 	if err != nil {
 		return attachQueueResponse{}, err
 	}
@@ -88,12 +88,12 @@ func (s *Queue) AttachQueue(queueOwnerID string) (attachQueueResponse, error) {
 }
 
 func (s *Queue) Backup() error {
-	_, err := s.Send("Backup ", "", "")
+	_, err := s.Send("Backup", "", "")
 	return err
 }
 
 func (s *Queue) Browse(startingIndex int, requestedCount int) (browseResponse, error) {
-	res, err := s.Send("Browse ", "<QueueID>"+s.QueueID+"</QueueID><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><RequestedCount>"+strconv.Itoa(requestedCount)+"</RequestedCount>", "s:Body")
+	res, err := s.Send("Browse", "<QueueID>"+s.QueueID+"</QueueID><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><RequestedCount>"+strconv.Itoa(requestedCount)+"</RequestedCount>", "s:Body")
 	if err != nil {
 		return browseResponse{}, err
 	}
@@ -103,7 +103,7 @@ func (s *Queue) Browse(startingIndex int, requestedCount int) (browseResponse, e
 }
 
 func (s *Queue) CreateQueue(queueOwnerID string, queueOwnerContext string, queuePolicy string) (int, error) {
-	res, err := s.Send("CreateQueue ", "<QueueOwnerID>"+queueOwnerID+"</QueueOwnerID><QueueOwnerContext>"+queueOwnerContext+"</QueueOwnerContext><QueuePolicy>"+queuePolicy+"</QueuePolicy>", "QueueID")
+	res, err := s.Send("CreateQueue", "<QueueOwnerID>"+queueOwnerID+"</QueueOwnerID><QueueOwnerContext>"+queueOwnerContext+"</QueueOwnerContext><QueuePolicy>"+queuePolicy+"</QueuePolicy>", "QueueID")
 	if err != nil {
 		return 0, err
 	}
@@ -111,7 +111,7 @@ func (s *Queue) CreateQueue(queueOwnerID string, queueOwnerContext string, queue
 }
 
 func (s *Queue) RemoveAllTracks() (int, error) {
-	res, err := s.Send("RemoveAllTracks ", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID>", "NewUpdateID")
+	res, err := s.Send("RemoveAllTracks", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID>", "NewUpdateID")
 	if err != nil {
 		return 0, err
 	}
@@ -119,7 +119,7 @@ func (s *Queue) RemoveAllTracks() (int, error) {
 }
 
 func (s *Queue) RemoveTrackRange(startingIndex int, numberOfTracks int) (int, error) {
-	res, err := s.Send("RemoveTrackRange ", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><NumberOfTracks>"+strconv.Itoa(numberOfTracks)+"</NumberOfTracks>", "NewUpdateID")
+	res, err := s.Send("RemoveTrackRange", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><NumberOfTracks>"+strconv.Itoa(numberOfTracks)+"</NumberOfTracks>", "NewUpdateID")
 	if err != nil {
 		return 0, err
 	}
@@ -127,7 +127,7 @@ func (s *Queue) RemoveTrackRange(startingIndex int, numberOfTracks int) (int, er
 }
 
 func (s *Queue) ReorderTracks(startingIndex int, numberOfTracks int, insertBefore int) (int, error) {
-	res, err := s.Send("ReorderTracks ", "<QueueID>"+s.QueueID+"</QueueID><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><NumberOfTracks>"+strconv.Itoa(numberOfTracks)+"</NumberOfTracks><InsertBefore>"+strconv.Itoa(insertBefore)+"</InsertBefore><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID>", "NewUpdateID")
+	res, err := s.Send("ReorderTracks", "<QueueID>"+s.QueueID+"</QueueID><StartingIndex>"+strconv.Itoa(startingIndex)+"</StartingIndex><NumberOfTracks>"+strconv.Itoa(numberOfTracks)+"</NumberOfTracks><InsertBefore>"+strconv.Itoa(insertBefore)+"</InsertBefore><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID>", "NewUpdateID")
 	if err != nil {
 		return 0, err
 	}
@@ -135,7 +135,7 @@ func (s *Queue) ReorderTracks(startingIndex int, numberOfTracks int, insertBefor
 }
 
 func (s *Queue) ReplaceAllTracks(containerURI string, containerMetaData string, currentTrackIndex int, newCurrentTrackIndices string, numberOfURIs int, enqueuedURIsAndMetaData string) (replaceAllTracksResponse, error) {
-	res, err := s.Send("ReplaceAllTracks ", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><ContainerURI>"+containerURI+"</ContainerURI><ContainerMetaData>"+containerMetaData+"</ContainerMetaData><CurrentTrackIndex>"+strconv.Itoa(currentTrackIndex)+"</CurrentTrackIndex><NewCurrentTrackIndices>"+newCurrentTrackIndices+"</NewCurrentTrackIndices><NumberOfURIs>"+strconv.Itoa(numberOfURIs)+"</NumberOfURIs><EnqueuedURIsAndMetaData>"+enqueuedURIsAndMetaData+"</EnqueuedURIsAndMetaData>", "s:Body")
+	res, err := s.Send("ReplaceAllTracks", "<QueueID>"+s.QueueID+"</QueueID><UpdateID>"+strconv.Itoa(s.UpdateID)+"</UpdateID><ContainerURI>"+containerURI+"</ContainerURI><ContainerMetaData>"+containerMetaData+"</ContainerMetaData><CurrentTrackIndex>"+strconv.Itoa(currentTrackIndex)+"</CurrentTrackIndex><NewCurrentTrackIndices>"+newCurrentTrackIndices+"</NewCurrentTrackIndices><NumberOfURIs>"+strconv.Itoa(numberOfURIs)+"</NumberOfURIs><EnqueuedURIsAndMetaData>"+enqueuedURIsAndMetaData+"</EnqueuedURIsAndMetaData>", "s:Body")
 	if err != nil {
 		return replaceAllTracksResponse{}, err
 	}
@@ -145,5 +145,5 @@ func (s *Queue) ReplaceAllTracks(containerURI string, containerMetaData string, 
 }
 
 func (s *Queue) SaveAsSonosPlaylist(title string, objectID string) (string, error) {
-	return s.Send("SaveAsSonosPlaylist ", "<QueueID>"+s.QueueID+"</QueueID><Title>"+title+"</Title><ObjectID>"+objectID+"</ObjectID>", "AssignedObjectID")
+	return s.Send("SaveAsSonosPlaylist", "<QueueID>"+s.QueueID+"</QueueID><Title>"+title+"</Title><ObjectID>"+objectID+"</ObjectID>", "AssignedObjectID")
 }
