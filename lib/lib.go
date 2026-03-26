@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	ErrSonos = struct{ ErrUnexpectedResponse, ErrInvalidIPAdress, ErrNoZonePlayerFound, ErrInvalidEndpoint, ErrTagNotFound, ErrInvalidContentType, ErrInvalidPlayMode error }{
+	ErrSonos = struct{ ErrUnexpectedResponse, ErrInvalidIPAddress, ErrNoZonePlayerFound, ErrInvalidEndpoint, ErrTagNotFound, ErrInvalidContentType, ErrInvalidPlayMode error }{
 		ErrUnexpectedResponse: errors.New("unexpected response"),
-		ErrInvalidIPAdress:    errors.New("unable to discover zone player"),
+		ErrInvalidIPAddress:   errors.New("unable to discover zone player"),
 		ErrNoZonePlayerFound:  errors.New("unable to find zone player"),
 		ErrTagNotFound:        errors.New("tag not found in response"),
 		ErrInvalidEndpoint:    errors.New("invalid endpoint"),
