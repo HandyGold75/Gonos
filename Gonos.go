@@ -164,7 +164,7 @@ var (
 func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
-		return &ZonePlayer{}, ErrSonos.ErrInvalidIPAdress
+		return &ZonePlayer{}, ErrSonos.ErrInvalidIPAddress
 	}
 
 	zp := &ZonePlayer{URL: "http://" + ip.String() + ":1400"}
