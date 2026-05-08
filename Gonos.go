@@ -164,7 +164,7 @@ var (
 func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
-		return &ZonePlayer{}, ErrSonos.ErrInvalidIPAddress
+		return nil, ErrSonos.ErrInvalidIPAddress
 	}
 
 	zp := &ZonePlayer{URL: "http://" + ip.String() + ":1400"}
@@ -187,7 +187,7 @@ func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 
 	info, err := zp.GetZoneInfo()
 	if err != nil {
-		return &ZonePlayer{}, ErrSonos.ErrNoZonePlayerFound
+		return nil, ErrSonos.ErrNoZonePlayerFound
 	}
 	zp.ZoneInfo = info
 	return zp, nil
@@ -200,7 +200,7 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 	multicastAddr := net.UDPAddr{IP: net.IPv4(239, 255, 255, 250), Port: 1900}
 	conn, err := net.ListenMulticastUDP("udp4", nil, &multicastAddr)
 	if err != nil {
-		return []*ZonePlayer{}, err
+		return nil, err
 	}
 	defer conn.Close()
 
@@ -213,7 +213,7 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 
 	_, err = conn.WriteTo(msg, &multicastAddr)
 	if err != nil {
-		return []*ZonePlayer{}, err
+		return nil, err
 	}
 
 	zps := []*ZonePlayer{}
