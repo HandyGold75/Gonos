@@ -257,32 +257,62 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 
 	ip, ipNet, err := net.ParseCIDR(cidr)
 	if err != nil {
-		return []*ZonePlayer{}, err
+		return nil, err
 	}
 
-	wg, zps := sync.WaitGroup{}, []*ZonePlayer{}
+	// Collect all IPs to scan
+	ips := []string{}
 	for ip := ip.Mask(ipNet.Mask); ipNet.Contains(ip); incIP(ip) {
-		wg.Add(1)
-		go func(ip string) {
-			defer wg.Done()
-
-			conn, err := net.DialTimeout("tcp", ip+":"+"1400", timeout)
-			if err != nil {
-				return
-			}
-			defer conn.Close()
-
-			zp, err := NewZonePlayer(ip)
-			if err != nil {
-				return
-			}
-			zps = append(zps, zp)
-		}(ip.String())
+		ips = append(ips, ip.String())
 	}
-	wg.Wait()
+
+	// Worker pool to avoid goroutine explosion on large CIDRs
+	const workers = 50
+	tasks := make(chan string, len(ips))
+	results := make(chan *ZonePlayer, len(ips))
+	var wg sync.WaitGroup
+
+	for i := 0; i < workers; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for ip := range tasks {
+				conn, err := net.DialTimeout("tcp", ip+":"+"1400", timeout)
+				if err != nil {
+					continue
+				}
+				conn.Close()
+
+				zp, err := NewZonePlayer(ip)
+				if err != nil {
+					continue
+				}
+				results <- zp
+			}
+		}()
+	}
+
+	// Feed tasks
+	go func() {
+		for _, ip := range ips {
+			tasks <- ip
+		}
+		close(tasks)
+	}()
+
+	// Close results when workers are done
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	zps := []*ZonePlayer{}
+	for zp := range results {
+		zps = append(zps, zp)
+	}
 
 	if len(zps) <= 0 {
-		return zps, ErrSonos.ErrNoZonePlayerFound
+		return nil, ErrSonos.ErrNoZonePlayerFound
 	}
 	return zps, nil
 }
