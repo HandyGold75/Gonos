@@ -164,7 +164,7 @@ var (
 func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
-		return &ZonePlayer{}, ErrSonos.ErrInvalidIPAddress
+		return nil, ErrSonos.ErrInvalidIPAddress
 	}
 
 	zp := &ZonePlayer{URL: "http://" + ip.String() + ":1400"}
@@ -187,7 +187,7 @@ func NewZonePlayer(ipAddress string) (*ZonePlayer, error) {
 
 	info, err := zp.GetZoneInfo()
 	if err != nil {
-		return &ZonePlayer{}, ErrSonos.ErrNoZonePlayerFound
+		return nil, ErrSonos.ErrNoZonePlayerFound
 	}
 	zp.ZoneInfo = info
 	return zp, nil
@@ -200,7 +200,7 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 	multicastAddr := net.UDPAddr{IP: net.IPv4(239, 255, 255, 250), Port: 1900}
 	conn, err := net.ListenMulticastUDP("udp4", nil, &multicastAddr)
 	if err != nil {
-		return []*ZonePlayer{}, err
+		return nil, err
 	}
 	defer conn.Close()
 
@@ -213,7 +213,7 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 
 	_, err = conn.WriteTo(msg, &multicastAddr)
 	if err != nil {
-		return []*ZonePlayer{}, err
+		return nil, err
 	}
 
 	zps := []*ZonePlayer{}
@@ -245,6 +245,8 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 // Create new ZonePlayer using network scanning for controling a Sonos speaker.
 //
 // `timeout` of 1 second is recomended.
+//
+// A maximum of 256 IP will be scanned at once, `timeout` is applied per batch, not as a total.
 func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 	incIP := func(ip net.IP) {
 		for j := len(ip) - 1; j >= 0; j-- {
@@ -257,32 +259,56 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 
 	ip, ipNet, err := net.ParseCIDR(cidr)
 	if err != nil {
-		return []*ZonePlayer{}, err
+		return nil, err
 	}
 
-	wg, zps := sync.WaitGroup{}, []*ZonePlayer{}
+	ips := []string{}
 	for ip := ip.Mask(ipNet.Mask); ipNet.Contains(ip); incIP(ip) {
-		wg.Add(1)
-		go func(ip string) {
-			defer wg.Done()
-
-			conn, err := net.DialTimeout("tcp", ip+":"+"1400", timeout)
-			if err != nil {
-				return
-			}
-			defer conn.Close()
-
-			zp, err := NewZonePlayer(ip)
-			if err != nil {
-				return
-			}
-			zps = append(zps, zp)
-		}(ip.String())
+		ips = append(ips, ip.String())
 	}
-	wg.Wait()
+
+	tasks, results := make(chan string, len(ips)), make(chan *ZonePlayer, len(ips))
+	var wg sync.WaitGroup
+
+	for i := 0; i < min(len(ips), 256); i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for ip := range tasks {
+				conn, err := net.DialTimeout("tcp", ip+":"+"1400", timeout)
+				if err != nil {
+					continue
+				}
+				conn.Close()
+
+				zp, err := NewZonePlayer(ip)
+				if err != nil {
+					continue
+				}
+				results <- zp
+			}
+		}()
+	}
+
+	go func() {
+		for _, ip := range ips {
+			tasks <- ip
+		}
+		close(tasks)
+	}()
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	zps := []*ZonePlayer{}
+	for zp := range results {
+		zps = append(zps, zp)
+	}
 
 	if len(zps) <= 0 {
-		return zps, ErrSonos.ErrNoZonePlayerFound
+		return nil, ErrSonos.ErrNoZonePlayerFound
 	}
 	return zps, nil
 }

@@ -16,8 +16,8 @@ var (
 		ErrInvalidEndpoint:    errors.New("invalid endpoint"),
 		ErrInvalidPlayMode:    errors.New("invalid play mode"),
 	}
-	ContentTypes = struct{ MusicLibrarys, Artist, AlbumArtist, Album, Genre, Composer, Tracks, Playlists, Share, SonosPlaylists, SonosFavorites, Radios, RadioStations, RadioShows, Queues, QueueMain, QueueSecond string }{
-		MusicLibrarys:  "A:",
+	ContentTypes = struct{ MusicLibraries, Artist, AlbumArtist, Album, Genre, Composer, Tracks, Playlists, Share, SonosPlaylists, SonosFavorites, Radios, RadioStations, RadioShows, Queues, QueueMain, QueueSecond string }{
+		MusicLibraries: "A:",
 		Artist:         "A:ARTIST",
 		AlbumArtist:    "A:ALBUMARTIST",
 		Album:          "A:ALBUM",
@@ -46,13 +46,13 @@ var (
 		PausedPlayback: "PAUSED_PLAYBACK",
 		Transitioning:  "TRANSITIONING",
 	}
-	PlayModes = struct{ Normal, RepeatAll, RepeatOne, ShuffleNorepeat, Shuffle, ShuffleRepeaOne string }{
+	PlayModes = struct{ Normal, RepeatAll, RepeatOne, ShuffleNorepeat, Shuffle, ShuffleRepeatOne string }{
 		Normal:          "NORMAL",
 		RepeatAll:       "REPEAT_ALL",
 		RepeatOne:       "REPEAT_ONE",
 		ShuffleNorepeat: "SHUFFLE_NOREPEAT",
 		Shuffle:         "SHUFFLE",
-		ShuffleRepeaOne: "SHUFFLE_REPEAT_ONE",
+		ShuffleRepeatOne: "SHUFFLE_REPEAT_ONE",
 	}
 	PlayModeMap = map[string][3]bool{
 		// "PlayMode": [2]bool{shuffle, repeat, repeatOne}
@@ -61,7 +61,7 @@ var (
 		PlayModes.RepeatOne:       {false, false, true},
 		PlayModes.ShuffleNorepeat: {true, false, false},
 		PlayModes.Shuffle:         {true, true, false},
-		PlayModes.ShuffleRepeaOne: {true, false, true},
+		PlayModes.ShuffleRepeatOne: {true, false, true},
 	}
 	PlayModeMapReversed = func() map[[3]bool]string {
 		m := map[[3]bool]string{}
