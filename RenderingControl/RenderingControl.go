@@ -50,8 +50,8 @@ func (s *RenderingControl) GetBass() (CurrentBass int, err error) {
 	return strconv.Atoi(res)
 }
 
-func (s *RenderingControl) GetEQ(eQType string) (CurrentValue string, err error) {
-	return s.Send("GetEQ", "<EQType>"+eQType+"</EQType>", "CurrentValue")
+func (s *RenderingControl) GetEQ(eqType string) (CurrentValue string, err error) {
+	return s.Send("GetEQ", "<EQType>"+eqType+"</EQType>", "CurrentValue")
 }
 
 func (s *RenderingControl) GetHeadphoneConnected() (CurrentHeadphoneConnected bool, err error) {
@@ -141,8 +141,8 @@ func (s *RenderingControl) ResetBasicEQ() (resetBasicEQResponse, error) {
 	return data, err
 }
 
-func (s *RenderingControl) ResetExtEQ(eQType string) error {
-	_, err := s.Send("ResetExtEQ", "<EQType>"+eQType+"</EQType>", "")
+func (s *RenderingControl) ResetExtEQ(eqType string) error {
+	_, err := s.Send("ResetExtEQ", "<EQType>"+eqType+"</EQType>", "")
 	return err
 }
 
@@ -161,8 +161,8 @@ func (s *RenderingControl) SetChannelMap(channelMap string) error {
 	return err
 }
 
-func (s *RenderingControl) SetEQ(eQType string, state string) error {
-	_, err := s.Send("SetEQ", "<EQType>"+eQType+"</EQType><DesiredValue>"+state+"</DesiredValue>", "")
+func (s *RenderingControl) SetEQ(eqType string, state string) error {
+	_, err := s.Send("SetEQ", "<EQType>"+eqType+"</EQType><DesiredValue>"+state+"</DesiredValue>", "")
 	return err
 }
 
@@ -194,8 +194,8 @@ func (s *RenderingControl) SetRoomCalibrationStatus(state bool) error {
 	return err
 }
 
-func (s *RenderingControl) SetRoomCalibrationX(calibrationID string, coeddicients string, calibrationMode string) error {
-	_, err := s.Send("SetRoomCalibrationX", "<CalibrationID>"+calibrationID+"</CalibrationID><Coefficients>"+coeddicients+"</Coefficients><CalibrationMode>"+calibrationMode+"</CalibrationMode>", "")
+func (s *RenderingControl) SetRoomCalibrationX(calibrationID string, coefficients string, calibrationMode string) error {
+	_, err := s.Send("SetRoomCalibrationX", "<CalibrationID>"+calibrationID+"</CalibrationID><Coefficients>"+coefficients+"</Coefficients><CalibrationMode>"+calibrationMode+"</CalibrationMode>", "")
 	return err
 }
 
