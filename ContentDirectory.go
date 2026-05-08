@@ -41,7 +41,7 @@ type (
 		Description string `xml:"description"`
 		ResMD       string `xml:"resMD"`
 	}
-	PLaylistInfo struct {
+	PlaylistInfo struct {
 		Count      int
 		TotalCount int
 		Playlists  []PlaylistInfoItem
@@ -143,17 +143,17 @@ func (zp *ZonePlayer) GetLibraryPlaylists() (LibraryInfo, error) {
 // Prefer methods `zp.GetShare`, `zp.GetSonosPlaylists`, `zp.GetSonosFavorites`, `zp.GetRadioStations` or `zp.GetRadioShows`.
 //
 // `objectID` may be one of `Gonos.ContentTypes.*` or a custom id
-func (zp *ZonePlayer) BrowsePlaylist(objectID string) (PLaylistInfo, error) {
+func (zp *ZonePlayer) BrowsePlaylist(objectID string) (PlaylistInfo, error) {
 	info, err := zp.ContentDirectory.Browse(objectID, "BrowseDirectChildren", "dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI", 0, 0, "")
 	if err != nil {
-		return PLaylistInfo{}, err
+		return PlaylistInfo{}, err
 	}
 	metadata := []browseResponseMetaDataQuePlaylist{}
 	err = lib.UnmarshalMetaData(info.Result, &metadata)
 	if err == io.EOF {
-		return PLaylistInfo{}, nil
+		return PlaylistInfo{}, nil
 	} else if err != nil {
-		return PLaylistInfo{}, err
+		return PlaylistInfo{}, err
 	}
 	playlists := []PlaylistInfoItem{}
 	for _, playlist := range metadata {
@@ -165,31 +165,31 @@ func (zp *ZonePlayer) BrowsePlaylist(objectID string) (PLaylistInfo, error) {
 			Type:        playlist.Type,
 		})
 	}
-	return PLaylistInfo{Count: info.NumberReturned, TotalCount: info.TotalMatches, Playlists: playlists}, nil
+	return PlaylistInfo{Count: info.NumberReturned, TotalCount: info.TotalMatches, Playlists: playlists}, nil
 }
 
 // Short for `zp.BrowsePlaylist(lib.ContentTypes.Share)`.
-func (zp *ZonePlayer) GetShare() (PLaylistInfo, error) {
+func (zp *ZonePlayer) GetShare() (PlaylistInfo, error) {
 	return zp.BrowsePlaylist(lib.ContentTypes.Share)
 }
 
 // Short for `zp.BrowsePlaylist(lib.ContentTypes.SonosPlaylists)`.
-func (zp *ZonePlayer) GetSonosPlaylists() (PLaylistInfo, error) {
+func (zp *ZonePlayer) GetSonosPlaylists() (PlaylistInfo, error) {
 	return zp.BrowsePlaylist(lib.ContentTypes.SonosPlaylists)
 }
 
 // Short for `zp.BrowsePlaylist(lib.ContentTypes.SonosFavorites)`.
-func (zp *ZonePlayer) GetSonosFavorites() (PLaylistInfo, error) {
+func (zp *ZonePlayer) GetSonosFavorites() (PlaylistInfo, error) {
 	return zp.BrowsePlaylist(lib.ContentTypes.SonosFavorites)
 }
 
 // Short for `zp.BrowsePlaylist(lib.ContentTypes.RadioStations)`.
-func (zp *ZonePlayer) GetRadioStations() (PLaylistInfo, error) {
+func (zp *ZonePlayer) GetRadioStations() (PlaylistInfo, error) {
 	return zp.BrowsePlaylist(lib.ContentTypes.RadioStations)
 }
 
 // Short for `zp.BrowsePlaylist(lib.ContentTypes.RadioShows)`.
-func (zp *ZonePlayer) GetRadioShows() (PLaylistInfo, error) {
+func (zp *ZonePlayer) GetRadioShows() (PlaylistInfo, error) {
 	return zp.BrowsePlaylist(lib.ContentTypes.RadioShows)
 }
 
