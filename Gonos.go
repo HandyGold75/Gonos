@@ -245,6 +245,8 @@ func DiscoverZonePlayer(timeout time.Duration) ([]*ZonePlayer, error) {
 // Create new ZonePlayer using network scanning for controling a Sonos speaker.
 //
 // `timeout` of 1 second is recomended.
+//
+// A maximum of 256 IP will be scanned at once, `timeout` is applied per batch, not as a total.
 func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 	incIP := func(ip net.IP) {
 		for j := len(ip) - 1; j >= 0; j-- {
@@ -260,19 +262,15 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 		return nil, err
 	}
 
-	// Collect all IPs to scan
 	ips := []string{}
 	for ip := ip.Mask(ipNet.Mask); ipNet.Contains(ip); incIP(ip) {
 		ips = append(ips, ip.String())
 	}
 
-	// Worker pool to avoid goroutine explosion on large CIDRs
-	const workers = 50
-	tasks := make(chan string, len(ips))
-	results := make(chan *ZonePlayer, len(ips))
+	tasks, results := make(chan string, len(ips)), make(chan *ZonePlayer, len(ips))
 	var wg sync.WaitGroup
 
-	for i := 0; i < workers; i++ {
+	for i := 0; i < min(len(ips), 256); i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
@@ -292,7 +290,6 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 		}()
 	}
 
-	// Feed tasks
 	go func() {
 		for _, ip := range ips {
 			tasks <- ip
@@ -300,7 +297,6 @@ func ScanZonePlayer(cidr string, timeout time.Duration) ([]*ZonePlayer, error) {
 		close(tasks)
 	}()
 
-	// Close results when workers are done
 	go func() {
 		wg.Wait()
 		close(results)
