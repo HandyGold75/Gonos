@@ -84,7 +84,7 @@ err := zp.Next() // Go to next track.
 err := zp.Previous() // Go to previous track.
 
 err := zp.SetShuffle(true) // Enable shuffle.
-isShuffle, err := zp.GetSuffle() // Check if shuffle is enabled.
+isShuffle, err := zp.GetShuffle() // Check if shuffle is enabled.
 
 err := zp.SetRepeat(true) // Enable repeat (Disables reapeat one).
 isRepeat, err := zp.GetRepeat() // Check if repeat is enabled.
